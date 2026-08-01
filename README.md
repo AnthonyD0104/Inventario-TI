@@ -1,0 +1,1 @@
+# Sistema Web Distribuido para la Gestión y Asignación de Equipos Tecnológicos
