@@ -36,6 +36,9 @@ public class Usuario {
     private String apellido;
 
     @Column(nullable = false)
+    private String cargo;
+
+    @Column(nullable = false)
     private Boolean activo = true;
 
     @ManyToOne(fetch = FetchType.LAZY)

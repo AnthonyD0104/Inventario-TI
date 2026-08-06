@@ -2,6 +2,8 @@ package com.inventarioti.backend.controller;
 
 import com.inventarioti.backend.entity.Departamento;
 import com.inventarioti.backend.service.interfaces.DepartamentoService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,30 +20,51 @@ public class DepartamentoController {
     }
 
     @GetMapping
-    public List<Departamento> listarDept() {
-        return departamentoService.listarDept();
+    public ResponseEntity<List<Departamento>> listarDept() {
+
+        List<Departamento> departamentos = departamentoService.listarDept();
+
+        return ResponseEntity.ok(departamentos);
     }
 
     @GetMapping("/{id}")
-    public Optional<Departamento> buscarDeptPorId(@PathVariable Long id) {
-        return departamentoService.buscarDeptPorId(id);
+    public ResponseEntity<Departamento> buscarDeptPorId(@PathVariable Long id) {
+        return departamentoService.buscarDeptPorId(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public Departamento guardarDept(@RequestBody Departamento departamento) {
-        return departamentoService.guardarDept(departamento);
+    public ResponseEntity<Departamento> guardarDept(@RequestBody Departamento departamento) {
+
+        Departamento nuevoDept = departamentoService.guardarDept(departamento);
+
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(nuevoDept);
     }
 
     @PutMapping("/{id}")
-    public Departamento actualizarDept(@PathVariable Long id,
-                          @RequestBody Departamento departamento) {
+    public ResponseEntity<Departamento> actualizarDept(
+            @PathVariable Long id,
+            @RequestBody Departamento departamento) {
 
-        return departamentoService.actualizarDept(id, departamento);
+        if (departamentoService.buscarDeptPorId(id).isEmpty()) {
+
+            return ResponseEntity.notFound().build();
+        }
+        Departamento actualizado = departamentoService.actualizarDept(id, departamento);
+        return ResponseEntity.ok(actualizado);
     }
 
     @DeleteMapping("/{id}")
-    public void eliminarDept(@PathVariable Long id) {
-        departamentoService.eliminarDept(id);
-    }
+    public ResponseEntity<Void> eliminarDept(@PathVariable Long id) {
 
+        if (departamentoService.buscarDeptPorId(id).isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        departamentoService.eliminarDept(id);
+
+        return ResponseEntity.noContent().build();
+    }
 }
