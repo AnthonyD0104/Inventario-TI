@@ -10,6 +10,8 @@ import com.inventarioti.backend.service.interfaces.UsuarioService;
 import com.inventarioti.backend.dto.request.UsuarioRequest;
 import com.inventarioti.backend.dto.response.UsuarioResponse;
 import com.inventarioti.backend.service.mapper.UsuarioMapper;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import com.inventarioti.backend.exception.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,14 +22,17 @@ public class UsuarioServiceImpl implements UsuarioService {
     private final UsuarioRepository usuarioRepository;
     private final RolRepository rolRepository;
     private final DepartamentoRepository departamentoRepository;
+    private final PasswordEncoder passwordEncoder;
 
     public UsuarioServiceImpl(
             UsuarioRepository usuarioRepository,
             RolRepository rolRepository,
-            DepartamentoRepository departamentoRepository) {
+            DepartamentoRepository departamentoRepository,
+            PasswordEncoder passwordEncoder) {
         this.usuarioRepository = usuarioRepository;
         this.rolRepository = rolRepository;
         this.departamentoRepository = departamentoRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -42,7 +47,7 @@ public class UsuarioServiceImpl implements UsuarioService {
     public UsuarioResponse buscarUsuarioPorId(Long id) {
 
         Usuario usuario = usuarioRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Usuario no encontrado."));
+                .orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado"));
         return UsuarioMapper.toResponse(usuario);
     }
 
@@ -50,17 +55,19 @@ public class UsuarioServiceImpl implements UsuarioService {
     public UsuarioResponse guardarUsuario(UsuarioRequest request) {
 
         Rol rol = rolRepository.findById(request.getIdRol())
-                .orElseThrow(() -> new RuntimeException("Rol no encontrado"));
+                .orElseThrow(() -> new ResourceNotFoundException("Rol no encontrado"));
         Departamento departamento = departamentoRepository.findById(request.getIdDepartamento())
-                .orElseThrow(() -> new RuntimeException("Departamento no encontrado."));
+                .orElseThrow(() -> new ResourceNotFoundException("Departamento no encontrado"));
 
         Usuario usuario = new Usuario();
 
         usuario.setUsuario(request.getUsuario());
-        usuario.setPassword(request.getPassword());
+        usuario.setPassword(
+                passwordEncoder.encode(request.getPassword())
+        );
         usuario.setCorreo(request.getCorreo());
-        usuario.setNombre(request.getNombres());
-        usuario.setApellido(request.getApellidos());
+        usuario.setNombres(request.getNombres());
+        usuario.setApellidos(request.getApellidos());
         usuario.setCargo(request.getCargo());
         usuario.setActivo(true);
         usuario.setRol(rol);
@@ -75,17 +82,17 @@ public class UsuarioServiceImpl implements UsuarioService {
     public UsuarioResponse actualizarUsuario(Long id, UsuarioRequest request) {
 
         Usuario usuario = usuarioRepository.findById(id)
-                        .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+                        .orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado"));
         Rol rol = rolRepository.findById(id)
-                        .orElseThrow(() -> new RuntimeException("Rol no encontrado"));
+                        .orElseThrow(() -> new ResourceNotFoundException("Rol no encontrado"));
         Departamento departamento = departamentoRepository.findById(id)
-                        .orElseThrow(() -> new RuntimeException("Departamento no encontrado"));
+                        .orElseThrow(() -> new ResourceNotFoundException("Departamento no encontrado"));
 
         usuario.setUsuario(request.getUsuario());
         usuario.setPassword(request.getPassword());
         usuario.setCorreo(request.getCorreo());
-        usuario.setNombre(request.getNombres());
-        usuario.setApellido(request.getApellidos());
+        usuario.setNombres(request.getNombres());
+        usuario.setApellidos(request.getApellidos());
         usuario.setCargo(request.getCargo());
         usuario.setRol(rol);
         usuario.setDepartamento(departamento);
@@ -98,7 +105,7 @@ public class UsuarioServiceImpl implements UsuarioService {
     public void eliminarUsuario(Long id) {
 
         if(!usuarioRepository.existsById(id)) {
-            throw new RuntimeException("Usuario no encontrado.");
+            throw new ResourceNotFoundException("Usuario no encontrado");
         }
         usuarioRepository.deleteById(id);
     }

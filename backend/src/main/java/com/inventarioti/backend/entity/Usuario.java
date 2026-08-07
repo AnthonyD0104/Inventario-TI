@@ -30,10 +30,10 @@ public class Usuario {
     private String correo;
 
     @Column(nullable = false)
-    private String nombre;
+    private String nombres;
 
     @Column(nullable = false)
-    private String apellido;
+    private String apellidos;
 
     @Column(nullable = false)
     private String cargo;
