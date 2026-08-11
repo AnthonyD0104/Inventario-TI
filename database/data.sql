@@ -8,10 +8,10 @@
 -- ===========================================
 
 INSERT INTO rol (nombre, activo) VALUES
-('Administrador', TRUE),
-('Recursos Humanos', TRUE),
-('Sistemas', TRUE),
-('Empleado', TRUE);
+('ADMIN', TRUE),
+('RRHH', TRUE),
+('TI', TRUE),
+('EMPLEADO', TRUE);
 
 -- ===========================================
 -- DEPARTAMENTOS
