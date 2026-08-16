@@ -1,10 +1,9 @@
-import axios from "axios";
+import api from "./axios";
 import type { LoginRequest, LoginResponse } from "../types/auth";
 
-const API_URL = "http://localhost:8080/api";
 export const login = async (
     datos: LoginRequest
 ): Promise<LoginResponse> => {
-    const response = await axios.post<LoginResponse>(`${API_URL}/auth/login`, datos);
+    const response = await api.post<LoginResponse>("/auth/login", datos);
     return response.data;
 };

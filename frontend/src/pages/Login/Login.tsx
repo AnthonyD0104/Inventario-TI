@@ -19,6 +19,7 @@ function Login() {
         nombres: response.nombres,
         apellidos: response.apellidos,
         rol: response.rol,
+        usuario: response.usuario,
       }));
       console.log("Login exitoso:", response);
       navigate("/");

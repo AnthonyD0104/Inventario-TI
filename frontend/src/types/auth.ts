@@ -8,5 +8,6 @@ export interface LoginResponse {
     nombres: string;
     apellidos: string;
     rol: string;
+    usuario: string;
 }
 
