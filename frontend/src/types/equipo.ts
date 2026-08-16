@@ -10,3 +10,13 @@ export interface EquipoResponse {
     idCategoria: number;
     categoria: string;
 }
+
+export interface EquipoRequest {
+    codigoActivo: string;
+    numeroSerie: string;
+    marca: string;
+    modelo: string;
+    estado: string;
+    fechaCompra: string;
+    idCategoria: number;
+}

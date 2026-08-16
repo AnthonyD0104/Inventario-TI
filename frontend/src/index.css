@@ -7,3 +7,7 @@
 body {
     font-family: 'Roboto', sans-serif;
 }
+
+.swal2-container {
+    z-index: 2000 !important;
+}

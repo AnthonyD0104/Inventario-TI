@@ -1,6 +1,7 @@
-import { useEffect, useState } from "react";
-import { getEquipos } from "../../api/equipo";
+import { useCallback, useEffect, useState } from "react";
+import { obtenerEquipos } from "../../api/equipo";
 import type { EquipoResponse } from "../../types/equipo";
+import EquipoFormModal from "./EquipoFormModal";
 import "./Equipos.css";
 
 import { Button, Chip, MenuItem, Paper, Select, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField } from "@mui/material";
@@ -12,19 +13,20 @@ function Equipos() {
     const [busqueda, setBusqueda] = useState("");
     const [estado, setEstado] = useState("");
     const [categoria, setCategoria] = useState("");
+    const [modalAbierto, setModalAbierto] = useState(false);
+
+    const cargarEquipos = useCallback(async () => {
+        try {
+            const data = await obtenerEquipos();
+            setEquipos(data);
+        } catch (error) {
+            console.error("Error al obtener equipos:", error);
+        }
+    }, []);
 
     useEffect(() => {
-        const cargarEquipos = async () => {
-            try {
-                const data = await getEquipos();
-                setEquipos(data);
-            } catch (error) {
-                console.error("Error al obtener equipos:", error);
-            }
-        };
-
         cargarEquipos();
-    }, []);
+    }, [cargarEquipos]);
 
     const equiposFiltrados = equipos.filter((equipo) => {
         const texto = busqueda.toLowerCase();
@@ -62,7 +64,7 @@ function Equipos() {
 
                 <Button
                     variant="contained"
-                    className="primary-button"
+                    onClick={() => setModalAbierto(true)}
                 >
                     + Nuevo equipo
                 </Button>
@@ -70,7 +72,6 @@ function Equipos() {
 
             <div className="equipos-card">
 
-                {/* FILTROS */}
                 <div className="equipos-filtros">
 
                     <TextField
@@ -92,12 +93,12 @@ function Equipos() {
                             Todos los estados
                         </MenuItem>
 
-                        {estados.map((estado) => (
+                        {estados.map((estadoOption) => (
                             <MenuItem
-                                key={estado}
-                                value={estado}
+                                key={estadoOption}
+                                value={estadoOption}
                             >
-                                {estado}
+                                {estadoOption}
                             </MenuItem>
                         ))}
                     </Select>
@@ -112,19 +113,18 @@ function Equipos() {
                             Todas las categorías
                         </MenuItem>
 
-                        {categorias.map((categoria) => (
+                        {categorias.map((categoriaOption) => (
                             <MenuItem
-                                key={categoria}
-                                value={categoria}
+                                key={categoriaOption}
+                                value={categoriaOption}
                             >
-                                {categoria}
+                                {categoriaOption}
                             </MenuItem>
                         ))}
                     </Select>
 
                 </div>
 
-                {/* TABLA */}
                 <TableContainer component={Paper} elevation={0}>
 
                     <Table>
@@ -266,6 +266,12 @@ function Equipos() {
                 </div>
 
             </div>
+
+            <EquipoFormModal
+                open={modalAbierto}
+                onClose={() => setModalAbierto(false)}
+                onCreated={cargarEquipos}
+            />
 
         </div>
     );

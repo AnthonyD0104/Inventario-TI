@@ -7,7 +7,7 @@ function TopBar() {
   const raw = localStorage.getItem("usuario");
   const usuario = raw ? JSON.parse(raw) : null;
   const navigate = useNavigate();
-  
+
   const handleLogout = async () => {
     const resultado = await Swal.fire({
       title: "¿Estás seguro de querer cerrar sesión?",
