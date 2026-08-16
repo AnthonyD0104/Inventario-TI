@@ -83,13 +83,15 @@ public class UsuarioServiceImpl implements UsuarioService {
 
         Usuario usuario = usuarioRepository.findById(id)
                         .orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado"));
-        Rol rol = rolRepository.findById(id)
+        Rol rol = rolRepository.findById(request.getIdRol())
                         .orElseThrow(() -> new ResourceNotFoundException("Rol no encontrado"));
-        Departamento departamento = departamentoRepository.findById(id)
+        Departamento departamento = departamentoRepository.findById(request.getIdDepartamento())
                         .orElseThrow(() -> new ResourceNotFoundException("Departamento no encontrado"));
 
         usuario.setUsuario(request.getUsuario());
-        usuario.setPassword(request.getPassword());
+        usuario.setPassword(
+                passwordEncoder.encode(request.getPassword())
+        );
         usuario.setCorreo(request.getCorreo());
         usuario.setNombres(request.getNombres());
         usuario.setApellidos(request.getApellidos());

@@ -69,7 +69,7 @@ public class DataInitializer implements CommandLineRunner {
                     .orElseThrow(() ->
                             new RuntimeException("Rol ADMIN no encontrado"));
             Departamento departamento = departamentoRepository
-                    .findByNombre("Sistemas TI")
+                    .findByNombre("Sistemas")
                     .orElseThrow(() ->
                             new RuntimeException("Departamento Sistemas TI no encontrado"));
             Usuario admin = new Usuario();

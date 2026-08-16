@@ -1,5 +1,7 @@
 package com.inventarioti.backend.service.interfaces;
 
+import com.inventarioti.backend.dto.request.CancelarSolcitudRequest;
+import com.inventarioti.backend.dto.request.CrearUsuarioSolicitudRequest;
 import com.inventarioti.backend.dto.request.RechazarSolicitudRequest;
 import com.inventarioti.backend.dto.request.SolicitudRequest;
 import com.inventarioti.backend.dto.response.SolicitudResponse;
@@ -15,5 +17,11 @@ public interface SolicitudService {
     SolicitudResponse rechazarSolicitud(
                 Long id,
                 RechazarSolicitudRequest request);
-    SolicitudResponse cancelarSolicitud(Long id);
+    SolicitudResponse crearUsuarioSolicitud(
+            Long id,
+            CrearUsuarioSolicitudRequest request
+    );
+    SolicitudResponse cancelarSolicitud(
+                Long id,
+                CancelarSolcitudRequest request);
 }

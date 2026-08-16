@@ -1,13 +1,17 @@
 package com.inventarioti.backend.controller;
 
+import com.inventarioti.backend.dto.request.CancelarSolcitudRequest;
+import com.inventarioti.backend.dto.request.CrearUsuarioSolicitudRequest;
 import com.inventarioti.backend.dto.request.RechazarSolicitudRequest;
 import com.inventarioti.backend.dto.request.SolicitudRequest;
 import com.inventarioti.backend.dto.response.SolicitudResponse;
-import com.inventarioti.backend.entity.Solicitud;
+import com.inventarioti.backend.service.interfaces.AsignacionEquipoService;
 import com.inventarioti.backend.service.interfaces.SolicitudService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import com.inventarioti.backend.dto.request.AsignacionEquipoRequest;
+import com.inventarioti.backend.dto.response.AsignacionEquipoResponse;
 
 import java.util.List;
 
@@ -15,8 +19,12 @@ import java.util.List;
 @RequestMapping("/api/solicitudes")
 public class SolicitudController {
     private final SolicitudService solicitudService;
-    public SolicitudController(SolicitudService solicitudService){
+    private final AsignacionEquipoService asignacionEquipoService;
+    public SolicitudController(
+            SolicitudService solicitudService,
+            AsignacionEquipoService asignacionEquipoService){
         this.solicitudService = solicitudService;
+        this.asignacionEquipoService = asignacionEquipoService;
     }
     @GetMapping
     public ResponseEntity<List<SolicitudResponse>> listarSolicitudes(){
@@ -56,9 +64,29 @@ public class SolicitudController {
     }
     @PutMapping("/{id}/cancelar")
     public ResponseEntity<SolicitudResponse> cancelarSolicitud(
-            @PathVariable Long id) {
+            @PathVariable Long id,
+            @RequestBody CancelarSolcitudRequest request) {
         return ResponseEntity.ok(
-                solicitudService.cancelarSolicitud(id)
+                solicitudService.cancelarSolicitud(id, request)
         );
+    }
+    @PostMapping("/{id}/crear-usuario")
+    public ResponseEntity<SolicitudResponse> crearUsuarioSolicitud(
+            @PathVariable Long id,
+            @RequestBody CrearUsuarioSolicitudRequest request) {
+
+        return ResponseEntity.ok(
+                solicitudService.crearUsuarioSolicitud(id, request)
+        );
+    }
+    @PostMapping("/{id}/asignar-equipo")
+    public ResponseEntity<AsignacionEquipoResponse> asignarEquipo(
+            @PathVariable Long id,
+            @RequestBody AsignacionEquipoRequest request) {
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(
+                        asignacionEquipoService.asignarEquipo(id, request)
+                );
     }
 }

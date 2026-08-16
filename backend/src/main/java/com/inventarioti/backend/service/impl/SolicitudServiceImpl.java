@@ -1,11 +1,15 @@
 package com.inventarioti.backend.service.impl;
 
+import com.inventarioti.backend.dto.request.CancelarSolcitudRequest;
+import com.inventarioti.backend.dto.request.CrearUsuarioSolicitudRequest;
 import com.inventarioti.backend.dto.request.SolicitudRequest;
 import com.inventarioti.backend.dto.response.SolicitudResponse;
 import com.inventarioti.backend.entity.Departamento;
 import com.inventarioti.backend.entity.Solicitud;
 import com.inventarioti.backend.entity.Usuario;
+import com.inventarioti.backend.exception.ResourceNotFoundException;
 import com.inventarioti.backend.repository.DepartamentoRepository;
+import com.inventarioti.backend.repository.RolRepository;
 import com.inventarioti.backend.repository.SolicitudRepository;
 import com.inventarioti.backend.repository.UsuarioRepository;
 import com.inventarioti.backend.service.interfaces.HistorialSolicitudService;
@@ -15,7 +19,10 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import com.inventarioti.backend.dto.request.RechazarSolicitudRequest;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import com.inventarioti.backend.dto.request.CrearUsuarioSolicitudRequest;
+import com.inventarioti.backend.entity.Rol;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -26,15 +33,22 @@ public class SolicitudServiceImpl implements SolicitudService {
     private final DepartamentoRepository departamentoRepository;
     private final UsuarioRepository usuarioRepository;
     private final HistorialSolicitudService historialSolicitudService;
+    private final RolRepository rolRepository;
+    private final PasswordEncoder passwordEncoder;
 
     public SolicitudServiceImpl(
             SolicitudRepository solicitudRepository,
             DepartamentoRepository departamentoRepository,
-            UsuarioRepository usuarioRepository, HistorialSolicitudService historialSolicitudService){
+            UsuarioRepository usuarioRepository,
+            HistorialSolicitudService historialSolicitudService,
+            RolRepository rolRepository,
+            PasswordEncoder passwordEncoder){
         this.solicitudRepository = solicitudRepository;
         this.departamentoRepository = departamentoRepository;
         this.usuarioRepository = usuarioRepository;
         this.historialSolicitudService = historialSolicitudService;
+        this.rolRepository = rolRepository;
+        this.passwordEncoder = passwordEncoder;
     }
     @Override
     public List<SolicitudResponse> listarSolicitudes() {
@@ -188,14 +202,91 @@ public class SolicitudServiceImpl implements SolicitudService {
         return SolicitudMapper.toResponse(solicitudGuardada);
     }
     @Override
+    @PreAuthorize("hasAnyRole('ADMIN', 'TI')")
+    public SolicitudResponse crearUsuarioSolicitud(
+            Long id,
+            CrearUsuarioSolicitudRequest request) {
+        Solicitud solicitud = solicitudRepository.findById(id)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Solicitud no encontrada"));
+        if (!solicitud.getEstado().equals("APROBADA")) {
+            throw new RuntimeException(
+                    "Solo se pueden crear usuarios desde solicitudes aprobadas"
+            );
+        }
+        if (solicitud.getUsuarioCreado() != null) {
+            throw new RuntimeException(
+                    "Esta solicitud ya tiene un usuario creado"
+            );
+        }
+        if (usuarioRepository.findByUsuario(request.getUsuario()).isPresent()) {
+            throw new RuntimeException(
+                    "El nombre de usuario ya existe"
+            );
+        }
+        Rol rol = rolRepository.findById(request.getIdRol())
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Rol no encontrado"));
+
+        Usuario usuario = new Usuario();
+        usuario.setUsuario(request.getUsuario());
+        usuario.setPassword(
+                passwordEncoder.encode("123456")
+        );
+        usuario.setCorreo(solicitud.getCorreo());
+        usuario.setNombres(solicitud.getNombres());
+        usuario.setApellidos(solicitud.getApellidos());
+        usuario.setCargo(solicitud.getCargo());
+
+        usuario.setRol(rol);
+        usuario.setDepartamento(solicitud.getDepartamento());
+        usuario.setActivo(true);
+        Usuario usuarioGuardado = usuarioRepository.save(usuario);
+
+        Authentication authentication =
+                SecurityContextHolder.getContext().getAuthentication();
+
+        String nombreUsuario = authentication.getName();
+
+        Usuario usuarioTi = usuarioRepository
+                .findByUsuario(nombreUsuario)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Usuario TI no encontrado"));
+        solicitud.setUsuarioCreado(usuarioGuardado);
+        solicitud.setUsuarioTi(usuarioTi);
+        String estadoAnterior = solicitud.getEstado();
+        solicitud.setEstado("PROCESADA");
+        Solicitud solicitudGuardada =
+                solicitudRepository.save(solicitud);
+
+        historialSolicitudService.registrarCambio(
+                solicitudGuardada,
+                usuarioTi,
+                estadoAnterior,
+                "PROCESADA",
+                "Usuario creado."
+        );
+
+        return SolicitudMapper.toResponse(solicitudGuardada);
+    }
+    @Override
     @PreAuthorize("hasAnyRole('ADMIN', 'RRHH')")
-    public SolicitudResponse cancelarSolicitud(Long id){
+    public SolicitudResponse cancelarSolicitud(
+            Long id,
+            CancelarSolcitudRequest request){
         Solicitud solicitud = solicitudRepository.findById(id)
                 .orElseThrow(()->
                         new RuntimeException("Solicitud no encontrada"));
         if(!solicitud.getEstado().equals("PENDIENTE")){
             throw new RuntimeException(
                     "Solo las solicitudes pendientes pueden cancelarse"
+            );
+        }
+        if (request.getComentario() == null ||
+                request.getComentario().trim().isEmpty()) {
+
+            throw new RuntimeException(
+                    "Debe ingresar un motivo de cancelación."
             );
         }
         Authentication authentication =
@@ -215,9 +306,17 @@ public class SolicitudServiceImpl implements SolicitudService {
                 );
             }
         }
+        String estadoAnterior = solicitud.getEstado();
         solicitud.setEstado("CANCELADA");
         Solicitud solicitudGuardada =
                 solicitudRepository.save(solicitud);
+        historialSolicitudService.registrarCambio(
+                solicitudGuardada,
+                usuarioAutenticado,
+                estadoAnterior,
+                "CANCELADA",
+                request.getComentario()
+        );
         return SolicitudMapper.toResponse(solicitudGuardada);
     }
 }
