@@ -1,31 +1,49 @@
-import { useState, type SyntheticEvent } from "react";
 import "./Login.css";
 import { login } from "../../api/auth";
 import { useNavigate } from "react-router-dom";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+
+import type { LoginRequest } from "../../types/auth";
+import { loginSchema } from "../../schemas/loginSchema";
 
 function Login() {
-  const [usuario, setUsuario] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, SetError] = useState("");
   const navigate = useNavigate();
 
-  const handleSubmit = async (e: SyntheticEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const {
+    register,
+    handleSubmit,
+    setError,
+    clearErrors,
+    formState: { errors, isSubmitting },
+  } = useForm<LoginRequest>({
+    resolver: yupResolver(loginSchema),
+  });
 
+  const onSubmit = async (datos: LoginRequest) => {
     try {
-      const response = await login({ usuario, password });
+      const response = await login(datos);
+
       localStorage.setItem("token", response.token);
-      localStorage.setItem("usuario", JSON.stringify({
-        nombres: response.nombres,
-        apellidos: response.apellidos,
-        rol: response.rol,
-        usuario: response.usuario,
-      }));
-      console.log("Login exitoso:", response);
+
+      localStorage.setItem(
+        "usuario",
+        JSON.stringify({
+          nombres: response.nombres,
+          apellidos: response.apellidos,
+          rol: response.rol,
+          usuario: response.usuario,
+        })
+      );
+
       navigate("/");
+
     } catch (error) {
       console.error("Error al iniciar sesión:", error);
-      SetError("Usuario o contraseña incorrectos");
+
+      setError("root", {
+        message: "Usuario o contraseña incorrectos",
+      });
     }
   };
 
@@ -38,56 +56,67 @@ function Login() {
           <p>Inicia sesión para continuar</p>
         </div>
 
-        <form onSubmit={handleSubmit} className="login-form">
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="login-form"
+        >
 
           <div className="form-group">
-            <label htmlFor="usuario">Usuario</label>
+            <label htmlFor="usuario">
+              Usuario
+            </label>
 
             <input
               id="usuario"
               type="text"
-              value={usuario}
-              onChange={(e) => {
-                setUsuario(e.target.value);
-                SetError("");
-              }}
               placeholder="Ingresa tu usuario"
-              required
-              onInvalid={(e) => {
-                e.currentTarget.setCustomValidity("El campo es obligatorio");
-              }}
-              onInput={(e) => {
-                e.currentTarget.setCustomValidity("");
-              }}
+              {...register("usuario", {
+                onChange: () => clearErrors("root"),
+              })}
             />
+
+            {errors.usuario && (
+              <p className="field-error">
+                {errors.usuario.message}
+              </p>
+            )}
           </div>
 
           <div className="form-group">
-            <label htmlFor="password">Contraseña</label>
+            <label htmlFor="password">
+              Contraseña
+            </label>
 
             <input
               id="password"
               type="password"
-              value={password}
-              onChange={(e) => {
-                setPassword(e.target.value);
-                SetError("");
-              }}
               placeholder="Ingresa tu contraseña"
-              required
-              onInvalid={(e) => {
-                e.currentTarget.setCustomValidity("El campo es obligatorio");
-              }}
-              onInput={(e) => {
-                e.currentTarget.setCustomValidity("");
-              }}
+              {...register("password", {
+                onChange: () => clearErrors("root"),
+              })}
             />
+
+            {errors.password && (
+              <p className="field-error">
+                {errors.password.message}
+              </p>
+            )}
           </div>
 
-          {error && <p className="error-message">{error}</p>}
+          {errors.root && (
+            <p className="error-message">
+              {errors.root.message}
+            </p>
+          )}
 
-          <button type="submit" className="login-button">
-            Iniciar sesión
+          <button
+            type="submit"
+            className="login-button"
+            disabled={isSubmitting}
+          >
+            {isSubmitting
+              ? "Iniciando sesión..."
+              : "Iniciar sesión"}
           </button>
 
         </form>

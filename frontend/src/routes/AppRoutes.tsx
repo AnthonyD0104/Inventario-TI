@@ -3,6 +3,7 @@ import Login from "../pages/Login/Login";
 import Home from "../pages/Home";
 import ProtectedRoute from "./ProtectedRoute";
 import MainLayout from "../layouts/MainLayout/MainLayout";
+import Equipos from "../pages/Equipos/Equipos";
 
 function AppRoutes() {
   return (
@@ -13,7 +14,7 @@ function AppRoutes() {
         <Route element={<ProtectedRoute />}>
           <Route element={<MainLayout />}>
             <Route path="/" element={<Home />} />
-            
+            <Route path="/equipos" element={<Equipos />} />
           </Route>
         </Route>
 
