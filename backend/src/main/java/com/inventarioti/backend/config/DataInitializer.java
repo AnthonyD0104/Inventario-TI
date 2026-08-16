@@ -39,7 +39,7 @@ public class DataInitializer implements CommandLineRunner {
         crearRolSiNoExiste("RRHH");
         crearRolSiNoExiste("EMPLEADO");
 
-        crearDepartamentoSiNoExiste("Sistemas TI");
+        crearDepartamentoSiNoExiste("Sistemas");
         crearDepartamentoSiNoExiste("Recursos Humanos");
         crearAdminSiNoExiste();
     }
