@@ -32,46 +32,19 @@ public class DataInitializer implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        System.out.println("Inicializando datos...");
+        System.out.println("Inicializando administrador...");
 
-        crearRolSiNoExiste("ADMIN");
-        crearRolSiNoExiste("TI");
-        crearRolSiNoExiste("RRHH");
-        crearRolSiNoExiste("EMPLEADO");
-
-        crearDepartamentoSiNoExiste("Sistemas");
-        crearDepartamentoSiNoExiste("Recursos Humanos");
         crearAdminSiNoExiste();
     }
-
-    private void crearRolSiNoExiste(String nombreRol) {
-
-        if (rolRepository.findByNombre(nombreRol).isEmpty()) {
-            Rol rol = new Rol();
-            rol.setNombre(nombreRol);
-            rolRepository.save(rol);
-            System.out.println("Rol creado: " + nombreRol);
-        }
-    }
-
-    private void crearDepartamentoSiNoExiste(String nombreDepartamento) {
-        if (departamentoRepository.findByNombre(nombreDepartamento).isEmpty()) {
-            Departamento departamento = new Departamento();
-            departamento.setNombre(nombreDepartamento);
-            departamentoRepository.save(departamento);
-            System.out.println("Departamento creado: " + nombreDepartamento);
-        }
-    }
-
     private void crearAdminSiNoExiste() {
         if (usuarioRepository.findByUsuario("admin").isEmpty()) {
             Rol rolAdmin = rolRepository.findByNombre("ADMIN")
                     .orElseThrow(() ->
                             new RuntimeException("Rol ADMIN no encontrado"));
             Departamento departamento = departamentoRepository
-                    .findByNombre("Sistemas")
+                    .findByNombre("Administrador")
                     .orElseThrow(() ->
-                            new RuntimeException("Departamento Sistemas TI no encontrado"));
+                            new RuntimeException("Departamento Administrador no encontrado"));
             Usuario admin = new Usuario();
             admin.setUsuario("admin");
             admin.setPassword(
