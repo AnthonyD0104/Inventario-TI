@@ -45,8 +45,14 @@ public class SecurityConfig {
                         //Administrador y TI
                         .requestMatchers(
                                 "/api/usuarios/**",
-                                "/api/equipos/**")
+                                "/api/equipos/**",
+                                "/api/asignaciones/directa")
                         .hasAnyRole("ADMIN", "TI")
+
+                        //Todos
+                        .requestMatchers(
+                                "/api/asignaciones/mis-equipos"
+                        ).hasAnyRole("ADMIN", "TI", "EMPLEADO","RRHH")
 
                         //Administrador, TI y RRHH
                         .requestMatchers(

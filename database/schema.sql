@@ -126,7 +126,7 @@ CREATE TABLE solicitud (
 CREATE TABLE asignacion_equipo (
 
     id_asignacion BIGINT AUTO_INCREMENT PRIMARY KEY,
-    id_solicitud BIGINT NOT NULL,
+    id_solicitud BIGINT,
     id_usuario BIGINT NOT NULL,
     id_equipo BIGINT NOT NULL,
     id_usuario_ti BIGINT NOT NULL,

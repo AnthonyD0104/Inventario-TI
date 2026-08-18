@@ -16,7 +16,7 @@ public class AsignacionEquipo {
     private Long idAsignacion;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_solicitud", nullable = false)
+    @JoinColumn(name = "id_solicitud")
     private Solicitud solicitud;
 
     @ManyToOne(fetch = FetchType.LAZY)

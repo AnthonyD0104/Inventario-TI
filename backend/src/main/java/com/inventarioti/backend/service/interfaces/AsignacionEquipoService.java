@@ -1,5 +1,6 @@
 package com.inventarioti.backend.service.interfaces;
 
+import com.inventarioti.backend.dto.request.AsignacionDirectaRequest;
 import com.inventarioti.backend.dto.request.AsignacionEquipoRequest;
 import com.inventarioti.backend.dto.response.AsignacionEquipoResponse;
 
@@ -11,6 +12,9 @@ public interface AsignacionEquipoService {
             Long idSolicitud,
             AsignacionEquipoRequest request
     );
+    AsignacionEquipoResponse asignarEquipoDirectamente(
+            AsignacionDirectaRequest request
+    );
     List<AsignacionEquipoResponse> listarAsignaciones();
 
     List<AsignacionEquipoResponse> listarEquiposPorUsuario(
@@ -19,4 +23,6 @@ public interface AsignacionEquipoService {
     List<AsignacionEquipoResponse> listarHistorialEquipo(
             Long idEquipo
     );
+    List<AsignacionEquipoResponse> listarMisEquipos();
+
 }

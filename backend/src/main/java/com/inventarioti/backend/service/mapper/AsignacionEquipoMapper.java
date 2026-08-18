@@ -15,7 +15,9 @@ public class AsignacionEquipoMapper {
                 .idAsignacion(asignacion.getIdAsignacion())
 
                 .idSolicitud(
-                        asignacion.getSolicitud().getIdSolicitud()
+                        asignacion.getSolicitud() != null
+                                ? asignacion.getSolicitud().getIdSolicitud()
+                                : null
                 )
                 .idUsuario(
                         asignacion.getUsuario().getIdUsuario()

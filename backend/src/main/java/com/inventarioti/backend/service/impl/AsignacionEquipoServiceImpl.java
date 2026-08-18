@@ -1,5 +1,6 @@
 package com.inventarioti.backend.service.impl;
 
+import com.inventarioti.backend.dto.request.AsignacionDirectaRequest;
 import com.inventarioti.backend.dto.request.AsignacionEquipoRequest;
 import com.inventarioti.backend.dto.response.AsignacionEquipoResponse;
 import com.inventarioti.backend.entity.AsignacionEquipo;
@@ -129,6 +130,58 @@ public class AsignacionEquipoServiceImpl
         return AsignacionEquipoMapper.toResponse(
                 asignacionGuardada);
     }
+    @Override
+    @PreAuthorize("hasAnyRole('ADMIN', 'TI')")
+    public AsignacionEquipoResponse asignarEquipoDirectamente(
+            AsignacionDirectaRequest request) {
+        Usuario usuario = usuarioRepository
+                .findById(request.getIdUsuario())
+                .orElseThrow(() ->
+                        new ResourceNotFoundException(
+                                "Usuario no encontrado"));
+        if (!usuario.getActivo()) {
+            throw new RuntimeException(
+                    "El usuario no está activo.");
+        }
+        Equipo equipo = equipoRepository
+                .findById(request.getIdEquipo())
+                .orElseThrow(() ->
+                        new ResourceNotFoundException(
+                                "Equipo no encontrado"));
+        if (!equipo.getActivo()) {
+            throw new RuntimeException(
+                    "El equipo no está activo.");
+        }
+        if (!equipo.getEstado().equals("DISPONIBLE")) {
+            throw new RuntimeException(
+                    "El equipo no está disponible para asignación.");
+        }
+        Authentication authentication =
+                SecurityContextHolder.getContext()
+                        .getAuthentication();
+        String nombreUsuario = authentication.getName();
+        Usuario usuarioTi = usuarioRepository
+                .findByUsuario(nombreUsuario)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException(
+                                "Usuario autenticado no encontrado"));
+        AsignacionEquipo asignacion = new AsignacionEquipo();
+
+        asignacion.setSolicitud(null);
+        asignacion.setUsuario(usuario);
+        asignacion.setEquipo(equipo);
+        asignacion.setUsuarioTi(usuarioTi);
+        asignacion.setFechaAsignacion(LocalDateTime.now());
+        asignacion.setEstado("ACTIVA");
+        asignacion.setObservaciones(request.getObservaciones());
+
+        AsignacionEquipo asignacionGuardada =
+                asignacionEquipoRepository.save(asignacion);
+        equipo.setEstado("ASIGNADO");
+        equipoRepository.save(equipo);
+        return AsignacionEquipoMapper.toResponse(
+                asignacionGuardada);
+    }
 
     @Override
     public List<AsignacionEquipoResponse> listarAsignaciones() {
@@ -165,6 +218,27 @@ public class AsignacionEquipoServiceImpl
 
         return asignacionEquipoRepository
                 .findByEquipo(equipo)
+                .stream()
+                .map(AsignacionEquipoMapper::toResponse)
+                .toList();
+    }
+    @Override
+    public List<AsignacionEquipoResponse> listarMisEquipos() {
+
+        Authentication authentication =
+                SecurityContextHolder.getContext()
+                        .getAuthentication();
+
+        String nombreUsuario = authentication.getName();
+
+        Usuario usuario = usuarioRepository
+                .findByUsuario(nombreUsuario)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException(
+                                "Usuario no encontrado"));
+
+        return asignacionEquipoRepository
+                .findByUsuarioAndEstado(usuario, "ACTIVA")
                 .stream()
                 .map(AsignacionEquipoMapper::toResponse)
                 .toList();
