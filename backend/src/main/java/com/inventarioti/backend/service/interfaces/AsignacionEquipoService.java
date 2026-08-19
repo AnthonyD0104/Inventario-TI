@@ -25,4 +25,6 @@ public interface AsignacionEquipoService {
     );
     List<AsignacionEquipoResponse> listarMisEquipos();
 
+    void devolverEquipo(Long idAsignacion);
+
 }

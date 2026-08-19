@@ -243,4 +243,29 @@ public class AsignacionEquipoServiceImpl
                 .map(AsignacionEquipoMapper::toResponse)
                 .toList();
     }
+    @Override
+    @PreAuthorize("hasAnyRole('ADMIN', 'TI')")
+    public void devolverEquipo(Long idAsignacion) {
+
+        AsignacionEquipo asignacion =
+                asignacionEquipoRepository.findById(idAsignacion)
+                        .orElseThrow(() ->
+                                new ResourceNotFoundException(
+                                        "Asignación no encontrada"));
+
+        if (!asignacion.getEstado().equals("ACTIVA")) {
+            throw new RuntimeException(
+                    "La asignación no está activa.");
+        }
+
+        Equipo equipo = asignacion.getEquipo();
+
+        asignacion.setFechaDevolucion(LocalDateTime.now());
+        asignacion.setEstado("DEVUELTA");
+
+        asignacionEquipoRepository.save(asignacion);
+
+        equipo.setEstado("DISPONIBLE");
+        equipoRepository.save(equipo);
+    }
 }

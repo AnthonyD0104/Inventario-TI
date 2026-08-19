@@ -57,4 +57,12 @@ public class AsignacionEquipoController {
                                 .asignarEquipoDirectamente(request)
                 );
     }
+    @PutMapping("/{idAsignacion}/devolver")
+    public ResponseEntity<Void> devolverEquipo(
+            @PathVariable Long idAsignacion) {
+
+        asignacionEquipoService.devolverEquipo(idAsignacion);
+
+        return ResponseEntity.noContent().build();
+    }
 }
