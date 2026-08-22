@@ -11,4 +11,5 @@ import java.util.List;
 @Repository
 public interface EquipoRepository extends JpaRepository<Equipo, Long> {
     List<Equipo> findByActivoTrue();
+    List<Equipo> findByActivoFalse();
 }

@@ -31,6 +31,14 @@ public class EquipoServiceImpl implements EquipoService {
                 .map(EquipoMapper::toResponse)
                 .toList();
     }
+
+    @Override
+    public List<EquipoResponse> listarEquiposInactivos() {
+        return equipoRepository.findByActivoFalse()
+                .stream()
+                .map(EquipoMapper::toResponse)
+                .toList();
+    }
     @Override
     public EquipoResponse buscarEquipoPorId(Long id){
         Equipo equipo = equipoRepository.findById(id)
@@ -85,8 +93,18 @@ public class EquipoServiceImpl implements EquipoService {
         Equipo equipo = equipoRepository.findById(id)
                 .orElseThrow(()->
                         new RuntimeException("Equipo no encontrado"));
-    equipo.setActivo(false);
-    equipoRepository.save(equipo);
+        equipo.setActivo(false);
+        equipoRepository.save(equipo);
+    }
+
+    @Override
+    public EquipoResponse restaurarEquipo(Long id) {
+        Equipo equipo = equipoRepository.findById(id)
+                .orElseThrow(() ->
+                        new RuntimeException("Equipo no encontrado"));
+        equipo.setActivo(true);
+        Equipo restaurado = equipoRepository.save(equipo);
+        return EquipoMapper.toResponse(restaurado);
     }
 
 }

@@ -21,6 +21,12 @@
     font-size: 15px;
 }
 
+.equipos-header-actions {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
 .equipos-card {
     background: #ffffff;
     border-radius: 12px;

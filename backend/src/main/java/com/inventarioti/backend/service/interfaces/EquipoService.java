@@ -7,8 +7,10 @@ import java.util.List;
 
 public interface EquipoService {
     List<EquipoResponse> listarEquipos();
+    List<EquipoResponse> listarEquiposInactivos();
     EquipoResponse buscarEquipoPorId(Long id);
     EquipoResponse guardarEquipo(EquipoRequest request);
     EquipoResponse actualizarEquipo(Long id, EquipoRequest request);
     void eliminarEquipo(Long id);
+    EquipoResponse restaurarEquipo(Long id);
 }

@@ -25,6 +25,14 @@ public class EquipoController {
                 equipoService.listarEquipos()
         );
     }
+
+    @GetMapping("/inactivos")
+    public ResponseEntity<List<EquipoResponse>> listarEquiposInactivos() {
+        return ResponseEntity.ok(
+                equipoService.listarEquiposInactivos()
+        );
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<EquipoResponse> buscarEquipoPorId(
             @PathVariable Long id) {
@@ -52,5 +60,13 @@ public class EquipoController {
             @PathVariable long id){
         equipoService.eliminarEquipo(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/{id}/restaurar")
+    public ResponseEntity<EquipoResponse> restaurarEquipo(
+            @PathVariable Long id) {
+        return ResponseEntity.ok(
+                equipoService.restaurarEquipo(id)
+        );
     }
 }
