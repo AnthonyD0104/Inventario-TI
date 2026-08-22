@@ -34,38 +34,46 @@ public class SecurityConfig {
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers("/api/auth/**").permitAll()
 
-                        // Lecturas necesarias para formularios de solicitudes
+                        // Lectura de catálogos (formularios)
                         .requestMatchers(HttpMethod.GET, "/api/departamentos/**")
                         .hasAnyRole("ADMIN", "TI", "RRHH")
 
                         .requestMatchers(HttpMethod.GET, "/api/roles/**")
                         .hasAnyRole("ADMIN", "TI")
 
-                        // Escritura de catálogos: solo ADMIN
-                        .requestMatchers(
-                                "/api/roles/**",
-                                "/api/departamentos/**",
-                                "/api/categorias/**"
-                        ).hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/categorias/**")
+                        .hasAnyRole("ADMIN", "TI")
 
-                        //Administrador y TI
+                        // Escritura de catálogos: solo ADMIN
+                        .requestMatchers(HttpMethod.POST, "/api/departamentos/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/departamentos/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/departamentos/**").hasRole("ADMIN")
+
+                        .requestMatchers(HttpMethod.POST, "/api/roles/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/roles/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/roles/**").hasRole("ADMIN")
+
+                        .requestMatchers(HttpMethod.POST, "/api/categorias/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/categorias/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/categorias/**").hasRole("ADMIN")
+
+                        // Administrador y TI
                         .requestMatchers(
                                 "/api/usuarios/**",
                                 "/api/equipos/**",
                                 "/api/asignaciones/directa")
                         .hasAnyRole("ADMIN", "TI")
 
-                        //Todos
-                        .requestMatchers(
-                                "/api/asignaciones/mis-equipos"
-                        ).hasAnyRole("ADMIN", "TI", "EMPLEADO","RRHH")
+                        // Mis equipos
+                        .requestMatchers("/api/asignaciones/mis-equipos")
+                        .hasAnyRole("ADMIN", "TI", "EMPLEADO", "RRHH")
 
-                        //Administrador, TI y RRHH
-                        .requestMatchers(
-                                "/api/solicitudes/**")
-                        .hasAnyRole("ADMIN","TI","RRHH")
+                        // Solicitudes
+                        .requestMatchers("/api/solicitudes/**")
+                        .hasAnyRole("ADMIN", "TI", "RRHH")
 
                         .anyRequest().authenticated()
                 )
