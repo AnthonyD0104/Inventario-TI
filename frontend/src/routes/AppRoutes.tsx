@@ -5,6 +5,7 @@ import ProtectedRoute from "./ProtectedRoute";
 import MainLayout from "../layouts/MainLayout/MainLayout";
 import Equipos from "../pages/Equipos/Equipos";
 import Solicitudes from "../pages/Solicitudes/Solicitudes";
+import HistorialSolicitudes from "../pages/HistorialSolicitudes/HistorialSolicitudes";
 
 function AppRoutes() {
   return (
@@ -17,6 +18,7 @@ function AppRoutes() {
             <Route path="/" element={<Home />} />
             <Route path="/equipos" element={<Equipos />} />
             <Route path="/solicitudes" element={<Solicitudes />} />
+            <Route path="/historial-solicitudes" element={<HistorialSolicitudes />} />
           </Route>
         </Route>
       </Routes>

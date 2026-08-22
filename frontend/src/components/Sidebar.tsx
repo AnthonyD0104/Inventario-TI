@@ -40,6 +40,17 @@ function Sidebar() {
           </NavLink>
         )}
 
+        {puedeVerSolicitudes && (
+          <NavLink
+            to="/historial-solicitudes"
+            className={({ isActive }) =>
+              `sidebar-link ${isActive ? "active" : ""}`
+            }
+          >
+            <span>Historial</span>
+          </NavLink>
+        )}
+
         {puedeVerEquipos && (
           <NavLink
             to="/equipos"

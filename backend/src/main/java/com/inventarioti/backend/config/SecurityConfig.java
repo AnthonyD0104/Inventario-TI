@@ -71,8 +71,10 @@ public class SecurityConfig {
                         .requestMatchers("/api/asignaciones/mis-equipos")
                         .hasAnyRole("ADMIN", "TI", "EMPLEADO", "RRHH")
 
-                        // Solicitudes
-                        .requestMatchers("/api/solicitudes/**")
+                        // Solicitudes e historial
+                        .requestMatchers(
+                                "/api/solicitudes/**",
+                                "/api/historial-solicitudes/**")
                         .hasAnyRole("ADMIN", "TI", "RRHH")
 
                         .anyRequest().authenticated()

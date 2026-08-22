@@ -12,8 +12,13 @@ import java.time.LocalDateTime;
 public class HistorialSolicitudResponse {
     private Long idHistorial;
     private Long idSolicitud;
+
+    private String colaborador;
+    private String departamento;
+
     private Long idUsuario;
     private String usuario;
+
     private String estadoAnterior;
     private String estadoNuevo;
     private String comentario;

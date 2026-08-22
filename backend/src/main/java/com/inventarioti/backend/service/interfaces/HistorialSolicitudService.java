@@ -7,6 +7,7 @@ import com.inventarioti.backend.entity.Usuario;
 import java.util.List;
 
 public interface HistorialSolicitudService {
+
     void registrarCambio(
             Solicitud solicitud,
             Usuario usuario,
@@ -14,5 +15,8 @@ public interface HistorialSolicitudService {
             String estadoNuevo,
             String comentario
     );
-        List<HistorialSolicitudResponse> listarHistorialPorSolicitud(Long idSolicitud);
+
+    List<HistorialSolicitudResponse> listarHistorial();
+
+    List<HistorialSolicitudResponse> listarHistorialPorSolicitud(Long idSolicitud);
 }
