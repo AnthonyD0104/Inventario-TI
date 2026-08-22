@@ -1,0 +1,7 @@
+import api from "./axios";
+import type { Departamento } from "../types/departamento";
+
+export const obtenerDepartamentos = async (): Promise<Departamento[]> => {
+  const response = await api.get<Departamento[]>("/departamentos");
+  return response.data;
+};

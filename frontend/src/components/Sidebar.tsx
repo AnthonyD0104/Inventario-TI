@@ -1,60 +1,58 @@
 import { NavLink } from "react-router-dom";
 
+function getRolSesion(): string {
+  try {
+    const raw = localStorage.getItem("usuario");
+    if (!raw) return "";
+    return JSON.parse(raw).rol ?? "";
+  } catch {
+    return "";
+  }
+}
+
 function Sidebar() {
-    return (
-        <aside className="sidebar">
+  const rol = getRolSesion();
 
-            <nav className="sidebar-nav">
+  const puedeVerSolicitudes =
+    rol === "ADMIN" || rol === "TI" || rol === "RRHH";
+  const puedeVerEquipos = rol === "ADMIN" || rol === "TI";
 
-                <NavLink
-                    to="/"
-                    className={({ isActive }) =>
-                        `sidebar-link ${isActive ? "active" : ""}`
-                    }
-                >
-                    <span>Inicio</span>
-                </NavLink>
+  return (
+    <aside className="sidebar">
+      <nav className="sidebar-nav">
+        <NavLink
+          to="/"
+          className={({ isActive }) =>
+            `sidebar-link ${isActive ? "active" : ""}`
+          }
+        >
+          <span>Inicio</span>
+        </NavLink>
 
-                <NavLink
-                    to="/mis-equipos"
-                    className={({ isActive }) =>
-                        `sidebar-link ${isActive ? "active" : ""}`
-                    }
-                >
-                    <span>Mis Equipos</span>
-                </NavLink>
+        {puedeVerSolicitudes && (
+          <NavLink
+            to="/solicitudes"
+            className={({ isActive }) =>
+              `sidebar-link ${isActive ? "active" : ""}`
+            }
+          >
+            <span>Solicitudes</span>
+          </NavLink>
+        )}
 
-                <NavLink
-                    to="/solicitudes"
-                    className={({ isActive }) =>
-                        `sidebar-link ${isActive ? "active" : ""}`
-                    }
-                >
-                    <span>Solicitudes</span>
-                </NavLink>
-
-                <NavLink
-                    to="/equipos"
-                    className={({ isActive }) =>
-                        `sidebar-link ${isActive ? "active" : ""}`
-                    }
-                >
-                    <span>Inventario de equipos</span>
-                </NavLink>
-
-                <NavLink
-                    to="/usuarios"
-                    className={({ isActive }) =>
-                        `sidebar-link ${isActive ? "active" : ""}`
-                    }
-                >
-                    <span>Usuarios</span>
-                </NavLink>
-
-            </nav>
-
-        </aside>
-    );
+        {puedeVerEquipos && (
+          <NavLink
+            to="/equipos"
+            className={({ isActive }) =>
+              `sidebar-link ${isActive ? "active" : ""}`
+            }
+          >
+            <span>Inventario de equipos</span>
+          </NavLink>
+        )}
+      </nav>
+    </aside>
+  );
 }
 
 export default Sidebar;

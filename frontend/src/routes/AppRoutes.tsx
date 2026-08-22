@@ -4,6 +4,7 @@ import Home from "../pages/Home";
 import ProtectedRoute from "./ProtectedRoute";
 import MainLayout from "../layouts/MainLayout/MainLayout";
 import Equipos from "../pages/Equipos/Equipos";
+import Solicitudes from "../pages/Solicitudes/Solicitudes";
 
 function AppRoutes() {
   return (
@@ -15,9 +16,9 @@ function AppRoutes() {
           <Route element={<MainLayout />}>
             <Route path="/" element={<Home />} />
             <Route path="/equipos" element={<Equipos />} />
+            <Route path="/solicitudes" element={<Solicitudes />} />
           </Route>
         </Route>
-
       </Routes>
     </BrowserRouter>
   );

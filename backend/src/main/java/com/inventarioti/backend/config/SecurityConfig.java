@@ -3,6 +3,7 @@ package com.inventarioti.backend.config;
 import com.inventarioti.backend.security.jwt.JwtFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -35,7 +36,14 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/**").permitAll()
 
-                        //Administrador
+                        // Lecturas necesarias para formularios de solicitudes
+                        .requestMatchers(HttpMethod.GET, "/api/departamentos/**")
+                        .hasAnyRole("ADMIN", "TI", "RRHH")
+
+                        .requestMatchers(HttpMethod.GET, "/api/roles/**")
+                        .hasAnyRole("ADMIN", "TI")
+
+                        // Escritura de catálogos: solo ADMIN
                         .requestMatchers(
                                 "/api/roles/**",
                                 "/api/departamentos/**",
