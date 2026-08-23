@@ -252,14 +252,7 @@ function Home() {
 
         <div className="home-meta">
           {rol && <Chip label={rol} color="primary" size="small" />}
-          {usuario?.usuario && (
-            <span style={{ color: "#6b7280", fontSize: 14 }}>
-              @{usuario.usuario}
-            </span>
-          )}
         </div>
-
-        <p className="home-subtitle">{getSubtitulo(rol)}</p>
       </header>
 
       <section className="home-section home-card">
