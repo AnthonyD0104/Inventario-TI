@@ -253,6 +253,8 @@ function Home() {
         <div className="home-meta">
           {rol && <Chip label={rol} color="primary" size="small" />}
         </div>
+
+        <p className="home-subtitle">{getSubtitulo(rol)}</p>
       </header>
 
       <section className="home-section home-card">
