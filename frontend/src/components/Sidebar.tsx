@@ -16,6 +16,7 @@ function Sidebar() {
   const puedeVerSolicitudes =
     rol === "ADMIN" || rol === "TI" || rol === "RRHH";
   const puedeVerEquipos = rol === "ADMIN" || rol === "TI";
+  const puedeVerUsuarios = rol === "ADMIN" || rol === "TI";
   const puedeVerAsignaciones = rol === "ADMIN" || rol === "TI";
   const puedeVerMisEquipos =
     rol === "ADMIN" ||
@@ -76,6 +77,17 @@ function Sidebar() {
             }
           >
             <span>Asignaciones</span>
+          </NavLink>
+        )}
+
+        {puedeVerUsuarios && (
+          <NavLink
+            to="/usuarios"
+            className={({ isActive }) =>
+              `sidebar-link ${isActive ? "active" : ""}`
+            }
+          >
+            <span>Usuarios</span>
           </NavLink>
         )}
 

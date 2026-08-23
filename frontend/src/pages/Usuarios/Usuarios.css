@@ -1,0 +1,55 @@
+.usuarios-page {
+  width: 100%;
+}
+
+.usuarios-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  gap: 16px;
+}
+
+.usuarios-header h1 {
+  margin: 0 0 8px;
+  font-size: 28px;
+  color: #1f2937;
+}
+
+.usuarios-header p {
+  margin: 0;
+  color: #6b7280;
+  font-size: 15px;
+}
+
+.usuarios-card {
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+  overflow: hidden;
+}
+
+.usuarios-filtros {
+  display: flex;
+  gap: 12px;
+  padding: 20px;
+  border-bottom: 1px solid #e5e7eb;
+  flex-wrap: wrap;
+}
+
+.usuarios-filtros > * {
+  flex: 1;
+  min-width: 160px;
+}
+
+.acciones {
+  display: flex;
+  gap: 8px;
+}
+
+.usuarios-footer {
+  padding: 14px 20px;
+  border-top: 1px solid #e5e7eb;
+  color: #6b7280;
+  font-size: 13px;
+}

@@ -8,6 +8,7 @@ import Solicitudes from "../pages/Solicitudes/Solicitudes";
 import HistorialSolicitudes from "../pages/HistorialSolicitudes/HistorialSolicitudes";
 import Asignaciones from "../pages/Asignaciones/Asignaciones";
 import MisEquipos from "../pages/MisEquipos/MisEquipos";
+import Usuarios from "../pages/Usuarios/Usuarios";
 
 function AppRoutes() {
   return (
@@ -19,6 +20,7 @@ function AppRoutes() {
           <Route element={<MainLayout />}>
             <Route path="/" element={<Home />} />
             <Route path="/equipos" element={<Equipos />} />
+            <Route path="/usuarios" element={<Usuarios />} />
             <Route path="/solicitudes" element={<Solicitudes />} />
             <Route
               path="/historial-solicitudes"
