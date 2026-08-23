@@ -96,11 +96,3 @@ Al arrancar, `DataInitializer` crea el usuario **admin** (`123456`) si no existe
 ```
 
 JAR generado en `target/`.
-
-## Tests
-
-```bash
-./mvnw test
-```
-
-Incluye un smoke test de contexto Spring (`BackendApplicationTests`).

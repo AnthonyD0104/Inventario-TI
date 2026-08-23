@@ -190,22 +190,6 @@ Los roles **TI**, **RRHH** y **EMPLEADO** existen en la base de datos; puedes cr
 
 > La contraseña `123456` en usuarios creados desde solicitud es intencional para el entorno de demostración.
 
-## Script de demostración (defensa)
-
-Secuencia sugerida (~10 minutos):
-
-1. **Login como ADMIN** → mostrar Home con KPIs y accesos rápidos.
-2. **Inventario** → listar equipos disponibles; opcional: crear uno nuevo.
-3. **Usuarios** → crear un usuario con rol EMPLEADO o RRHH.
-4. **Logout** → entrar como **RRHH** → **Solicitudes** → crear solicitud de equipo para un colaborador.
-5. **Logout** → entrar como **ADMIN/TI** → aprobar la solicitud.
-6. **Crear usuario** desde la solicitud aprobada (contraseña inicial `123456`).
-7. **Asignar equipo** disponible → solicitud pasa a `FINALIZADA`.
-8. **Historial** → mostrar trazabilidad de cambios.
-9. **Asignaciones** → devolver un equipo o hacer asignación directa.
-10. **Login como EMPLEADO** → **Mis equipos** → ver asignación activa.
-11. *(Opcional)* **Docker** → `docker compose up --build` y repetir login en http://localhost.
-
 ## Endpoints principales de la API
 
 | Módulo | Base path | Descripción |
@@ -229,14 +213,7 @@ Entidades principales: **Usuario**, **Equipo**, **Solicitud**, **AsignacionEquip
 
 Scripts completos: `database/schema.sql` y `database/data.sql`.
 
-## Notas para evaluación
-
-- **Sistema distribuido:** frontend, API y base de datos como servicios separados, comunicados por HTTP/REST.
-- **Seguridad:** autenticación stateless (JWT), autorización por rol en backend.
-- **Trazabilidad:** cada cambio relevante en solicitudes queda registrado en historial.
-- **Despliegue reproducible:** Docker Compose empaqueta los tres servicios con un solo comando.
-
 ## Desarrollado por
 
-Anthony Dávila
-Kevin Jiménez
+-Anthony Dávila
+-Kevin Jiménez

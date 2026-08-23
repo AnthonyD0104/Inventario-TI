@@ -70,15 +70,12 @@ En Docker, el build usa `VITE_API_URL=/api` (proxy nginx hacia el backend).
 | `npm run dev` | Servidor de desarrollo con recarga en caliente |
 | `npm run build` | Compila para producción (`dist/`) |
 | `npm run preview` | Previsualiza el build local |
-| `npm run lint` | ESLint |
 
 ## Build de producción
 
 ```bash
 npm run build
 ```
-
-Artefactos en `frontend/dist/`. En Docker, nginx sirve esa carpeta (ver `frontend/Dockerfile` y `nginx.conf`).
 
 ## Autenticación en el cliente
 
@@ -87,11 +84,9 @@ Tras el login, se guardan en `localStorage`:
 - `token` — JWT enviado en cada petición (interceptor axios)
 - `usuario` — `{ nombres, apellidos, rol, usuario }` para UI y menú
 
-## Desarrollo vs Docker
+## Local vs Docker
 
 | Modo | Comando | URL app | API |
 |------|---------|---------|-----|
-| Desarrollo | `npm run dev` | :5173 | `localhost:8080/api` |
+| Local | `npm run dev` | :5173 | `localhost:8080/api` |
 | Docker | `docker compose up` | :80 | `/api` (proxy nginx) |
-
-Para desarrollo diario se recomienda `npm run dev`; Docker es ideal para demo y despliegue reproducible.
