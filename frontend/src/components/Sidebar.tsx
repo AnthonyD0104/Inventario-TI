@@ -16,6 +16,12 @@ function Sidebar() {
   const puedeVerSolicitudes =
     rol === "ADMIN" || rol === "TI" || rol === "RRHH";
   const puedeVerEquipos = rol === "ADMIN" || rol === "TI";
+  const puedeVerAsignaciones = rol === "ADMIN" || rol === "TI";
+  const puedeVerMisEquipos =
+    rol === "ADMIN" ||
+    rol === "TI" ||
+    rol === "RRHH" ||
+    rol === "EMPLEADO";
 
   return (
     <aside className="sidebar">
@@ -28,6 +34,17 @@ function Sidebar() {
         >
           <span>Inicio</span>
         </NavLink>
+
+        {puedeVerMisEquipos && (
+          <NavLink
+            to="/mis-equipos"
+            className={({ isActive }) =>
+              `sidebar-link ${isActive ? "active" : ""}`
+            }
+          >
+            <span>Mis equipos</span>
+          </NavLink>
+        )}
 
         {puedeVerSolicitudes && (
           <NavLink
@@ -48,6 +65,17 @@ function Sidebar() {
             }
           >
             <span>Historial</span>
+          </NavLink>
+        )}
+
+        {puedeVerAsignaciones && (
+          <NavLink
+            to="/asignaciones"
+            className={({ isActive }) =>
+              `sidebar-link ${isActive ? "active" : ""}`
+            }
+          >
+            <span>Asignaciones</span>
           </NavLink>
         )}
 

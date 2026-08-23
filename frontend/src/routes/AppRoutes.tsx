@@ -6,6 +6,8 @@ import MainLayout from "../layouts/MainLayout/MainLayout";
 import Equipos from "../pages/Equipos/Equipos";
 import Solicitudes from "../pages/Solicitudes/Solicitudes";
 import HistorialSolicitudes from "../pages/HistorialSolicitudes/HistorialSolicitudes";
+import Asignaciones from "../pages/Asignaciones/Asignaciones";
+import MisEquipos from "../pages/MisEquipos/MisEquipos";
 
 function AppRoutes() {
   return (
@@ -18,7 +20,12 @@ function AppRoutes() {
             <Route path="/" element={<Home />} />
             <Route path="/equipos" element={<Equipos />} />
             <Route path="/solicitudes" element={<Solicitudes />} />
-            <Route path="/historial-solicitudes" element={<HistorialSolicitudes />} />
+            <Route
+              path="/historial-solicitudes"
+              element={<HistorialSolicitudes />}
+            />
+            <Route path="/asignaciones" element={<Asignaciones />} />
+            <Route path="/mis-equipos" element={<MisEquipos />} />
           </Route>
         </Route>
       </Routes>

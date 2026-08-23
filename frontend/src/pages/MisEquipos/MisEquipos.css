@@ -1,0 +1,33 @@
+.mis-equipos-page {
+  width: 100%;
+}
+
+.mis-equipos-header {
+  margin-bottom: 24px;
+}
+
+.mis-equipos-header h1 {
+  margin: 0 0 8px;
+  font-size: 28px;
+  color: #1f2937;
+}
+
+.mis-equipos-header p {
+  margin: 0;
+  color: #6b7280;
+  font-size: 15px;
+}
+
+.mis-equipos-card {
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+  overflow: hidden;
+}
+
+.mis-equipos-footer {
+  padding: 14px 20px;
+  border-top: 1px solid #e5e7eb;
+  color: #6b7280;
+  font-size: 13px;
+}
