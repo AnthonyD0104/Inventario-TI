@@ -16,8 +16,11 @@ public class CorsConfig {
 
         CorsConfiguration configuration = new CorsConfiguration();
 
+        // Vite (dev) + Docker/nginx (http://localhost or :80)
         configuration.setAllowedOrigins(List.of(
-                "http://localhost:5173"
+                "http://localhost:5173",
+                "http://localhost",
+                "http://localhost:80"
         ));
 
         configuration.setAllowedMethods(List.of(
