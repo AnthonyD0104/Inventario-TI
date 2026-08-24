@@ -10,6 +10,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import com.inventarioti.backend.security.jwt.JwtService;
 import org.springframework.stereotype.Service;
 
+// Servicio: autenticación y generación de JWT
 @Service
 public class AuthServiceImpl implements AuthService {
 
@@ -27,16 +28,19 @@ public class AuthServiceImpl implements AuthService {
         this.jwtService = jwtService;
     }
 
+    // Valida credenciales y genera el token JWT
     @Override
     public LoginResponse login(LoginRequest request) {
 
         Usuario usuario = usuarioRepository.findByUsuario(request.getUsuario())
                 .orElseThrow(() ->
                         new BadRequestException("Usuario o contrasenia incorrectos"));
+        // Valida usuario y contraseña
         if (!passwordEncoder.matches(request.getPassword(), usuario.getPassword())) {
             throw new BadRequestException("Usuario o contrasenia incorrectos");
         }
 
+        // Genera el JWT con username y rol
         String token = jwtService.generarToken(usuario);
 
         return new LoginResponse(

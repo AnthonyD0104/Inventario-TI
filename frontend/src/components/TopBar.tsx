@@ -1,3 +1,4 @@
+// Componente: barra superior con usuario y cierre de sesión
 import { IconButton, Tooltip } from "@mui/material";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { useNavigate } from "react-router-dom";
@@ -8,6 +9,7 @@ function TopBar() {
   const usuario = raw ? JSON.parse(raw) : null;
   const navigate = useNavigate();
 
+  // Confirma, limpia la sesión y vuelve al login
   const handleLogout = async () => {
     const resultado = await Swal.fire({
       title: "¿Estás seguro de querer cerrar sesión?",
@@ -31,6 +33,7 @@ function TopBar() {
         Inventario TI
       </div>
 
+      {/* Usuario de la sesión y botón de logout */}
       <div className="topbar-user">
         <div className="topbar-user-info">
           <span className="topbar-user-name">{usuario?.usuario}</span>

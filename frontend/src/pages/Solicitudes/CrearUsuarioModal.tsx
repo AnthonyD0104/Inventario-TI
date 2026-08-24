@@ -1,3 +1,4 @@
+// Modal: crea usuario a partir de una solicitud
 import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -31,9 +32,11 @@ type Props = {
 };
 
 function CrearUsuarioModal({ open, onClose, solicitud, onSaved }: Props) {
+  // Roles activos y error de envío
   const [roles, setRoles] = useState<Rol[]>([]);
   const [errorGeneral, setErrorGeneral] = useState("");
 
+  // Validación del formulario de usuario
   const {
     control,
     handleSubmit,
@@ -50,6 +53,7 @@ function CrearUsuarioModal({ open, onClose, solicitud, onSaved }: Props) {
   useEffect(() => {
     if (!open || !solicitud) return;
 
+    // Carga roles y sugiere un nombre de usuario al abrir
     const cargar = async () => {
       setErrorGeneral("");
       try {
@@ -77,6 +81,7 @@ function CrearUsuarioModal({ open, onClose, solicitud, onSaved }: Props) {
 
   if (!solicitud) return null;
 
+  // Envía el alta de usuario al backend
   const onSubmit = async (datos: CrearUsuarioSolicitudRequest) => {
     setErrorGeneral("");
 
@@ -111,6 +116,7 @@ function CrearUsuarioModal({ open, onClose, solicitud, onSaved }: Props) {
       <DialogTitle>Crear usuario</DialogTitle>
       <form onSubmit={handleSubmit(onSubmit)}>
         <DialogContent>
+          {/* Formulario: usuario sugerido y rol */}
           <Stack spacing={2} sx={{ mt: 1 }}>
             <Typography variant="body2" color="text.secondary">
               Colaborador: {solicitud.nombres} {solicitud.apellidos} (
@@ -159,6 +165,7 @@ function CrearUsuarioModal({ open, onClose, solicitud, onSaved }: Props) {
             )}
           </Stack>
         </DialogContent>
+        {/* Acciones: cancelar o crear usuario */}
         <DialogActions sx={{ px: 3, pb: 2 }}>
           <Button onClick={onClose} disabled={isSubmitting}>
             Cancelar

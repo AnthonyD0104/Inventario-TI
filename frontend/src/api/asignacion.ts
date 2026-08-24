@@ -2,6 +2,7 @@ import api from "./axios";
 import type { AsignacionEquipoResponse } from "../types/asignacion";
 import type { AsignacionDirectaRequest } from "../types/usuario";
 
+// GET asignaciones — lista todas las asignaciones
 export const obtenerAsignaciones = async (): Promise<
   AsignacionEquipoResponse[]
 > => {
@@ -9,6 +10,7 @@ export const obtenerAsignaciones = async (): Promise<
   return response.data;
 };
 
+// GET asignaciones — equipos del usuario actual
 export const obtenerMisEquipos = async (): Promise<
   AsignacionEquipoResponse[]
 > => {
@@ -18,6 +20,7 @@ export const obtenerMisEquipos = async (): Promise<
   return response.data;
 };
 
+// POST asignación directa — asigna equipo a un usuario
 export const asignarEquipoDirecto = async (
   datos: AsignacionDirectaRequest
 ): Promise<AsignacionEquipoResponse> => {
@@ -28,6 +31,7 @@ export const asignarEquipoDirecto = async (
   return response.data;
 };
 
+// PUT devolver — marca el equipo como devuelto
 export const devolverEquipo = async (idAsignacion: number): Promise<void> => {
   await api.put(`/asignaciones/${idAsignacion}/devolver`);
 };

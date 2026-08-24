@@ -1,3 +1,4 @@
+// Página: inicio de sesión
 import "./Login.css";
 import { login } from "../../api/auth";
 import { useNavigate } from "react-router-dom";
@@ -10,6 +11,7 @@ import { loginSchema } from "../../schemas/loginSchema";
 function Login() {
   const navigate = useNavigate();
 
+  // Validación del formulario de login
   const {
     register,
     handleSubmit,
@@ -20,6 +22,7 @@ function Login() {
     resolver: yupResolver(loginSchema),
   });
 
+  // Autentica, guarda sesión y redirige al inicio
   const onSubmit = async (datos: LoginRequest) => {
     try {
       const response = await login(datos);
@@ -56,6 +59,7 @@ function Login() {
           <p>Inicia sesión para continuar</p>
         </div>
 
+        {/* Formulario de usuario y contraseña */}
         <form
           onSubmit={handleSubmit(onSubmit)}
           className="login-form"

@@ -3,9 +3,11 @@ package com.inventarioti.backend.service.mapper;
 import com.inventarioti.backend.dto.response.SolicitudResponse;
 import com.inventarioti.backend.entity.Solicitud;
 
+// Mapper: convierte Solicitud a DTO de respuesta
 public class SolicitudMapper {
     private SolicitudMapper(){
     }
+    // Convierte la entidad a su response
     public static SolicitudResponse toResponse(Solicitud solicitud) {
         return SolicitudResponse.builder()
                 .idSolicitud(solicitud.getIdSolicitud())

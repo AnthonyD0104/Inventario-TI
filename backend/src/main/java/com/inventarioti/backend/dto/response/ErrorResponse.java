@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
+// DTO response: error estándar para el frontend
 public class ErrorResponse {
 
     private LocalDateTime fecha;

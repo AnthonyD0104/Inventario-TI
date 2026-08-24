@@ -1,3 +1,4 @@
+// Página: equipos asignados al usuario actual
 import { useCallback, useEffect, useState } from "react";
 import {
   Chip,
@@ -23,6 +24,7 @@ function formatFecha(fecha: string | null) {
 function MisEquipos() {
   const [equipos, setEquipos] = useState<AsignacionEquipoResponse[]>([]);
 
+  // Trae los equipos asignados al usuario de la sesión
   const cargar = useCallback(async () => {
     try {
       const data = await obtenerMisEquipos();
@@ -48,6 +50,7 @@ function MisEquipos() {
       </div>
 
       <div className="mis-equipos-card">
+        {/* Tabla de equipos asignados */}
         <TableContainer component={Paper} elevation={0}>
           <Table>
             <TableHead>
@@ -76,6 +79,7 @@ function MisEquipos() {
                 </TableRow>
               ))}
 
+              {/* Empty state: sin equipos asignados */}
               {equipos.length === 0 && (
                 <TableRow>
                   <TableCell colSpan={6} align="center">

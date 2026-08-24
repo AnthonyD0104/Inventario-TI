@@ -10,24 +10,28 @@ import Asignaciones from "../pages/Asignaciones/Asignaciones";
 import MisEquipos from "../pages/MisEquipos/MisEquipos";
 import Usuarios from "../pages/Usuarios/Usuarios";
 
+// Rutas de la aplicación: públicas y protegidas
 function AppRoutes() {
   return (
     <BrowserRouter>
       <Routes>
+        {/* Ruta pública: login */}
         <Route path="/login" element={<Login />} />
 
+        {/* Guard: exige autenticación (JWT) */}
         <Route element={<ProtectedRoute />}>
+          {/* Rutas protegidas con layout principal */}
           <Route element={<MainLayout />}>
-            <Route path="/" element={<Home />} />
-            <Route path="/equipos" element={<Equipos />} />
-            <Route path="/usuarios" element={<Usuarios />} />
-            <Route path="/solicitudes" element={<Solicitudes />} />
+            <Route path="/" element={<Home />} /> {/* Dashboard */}
+            <Route path="/equipos" element={<Equipos />} /> {/* Inventario */}
+            <Route path="/usuarios" element={<Usuarios />} /> {/* Usuarios */}
+            <Route path="/solicitudes" element={<Solicitudes />} /> {/* Flujo solicitudes */}
             <Route
               path="/historial-solicitudes"
               element={<HistorialSolicitudes />}
-            />
-            <Route path="/asignaciones" element={<Asignaciones />} />
-            <Route path="/mis-equipos" element={<MisEquipos />} />
+            /> {/* Auditoría de solicitudes */}
+            <Route path="/asignaciones" element={<Asignaciones />} /> {/* Asignaciones */}
+            <Route path="/mis-equipos" element={<MisEquipos />} /> {/* Equipos del colaborador */}
           </Route>
         </Route>
       </Routes>

@@ -1,3 +1,4 @@
+// Página: listado de equipos
 import { useCallback, useEffect, useState } from "react";
 import {
   eliminarEquipo,
@@ -31,18 +32,22 @@ import RestoreIcon from "@mui/icons-material/Restore";
 import Swal from "sweetalert2";
 
 function Equipos() {
+  // Listado y filtros
   const [equipos, setEquipos] = useState<EquipoResponse[]>([]);
   const [busqueda, setBusqueda] = useState("");
   const [estado, setEstado] = useState("");
   const [categoria, setCategoria] = useState("");
 
+  // Modal de alta/edición
   const [formAbierto, setFormAbierto] = useState(false);
   const [equipoEditar, setEquipoEditar] = useState<EquipoResponse | null>(null);
 
+  // Modal de detalle y vista de dados de baja
   const [detalleAbierto, setDetalleAbierto] = useState(false);
   const [equipoVer, setEquipoVer] = useState<EquipoResponse | null>(null);
   const [verInactivos, setVerInactivos] = useState(false);
 
+  // Carga el inventario (activos o dados de baja)
   const cargarEquipos = useCallback(async () => {
     try {
       const data = verInactivos
@@ -58,26 +63,31 @@ function Equipos() {
     cargarEquipos();
   }, [cargarEquipos]);
 
+  // Abre el modal de creación
   const abrirCrear = () => {
     setEquipoEditar(null); 
     setFormAbierto(true);
   };
 
+  // Abre el modal en modo edición
   const abrirEditar = (equipo: EquipoResponse) => {
     setEquipoEditar(equipo);
     setFormAbierto(true);
   };
 
+  // Abre el modal de detalle
   const abrirVer = (equipo: EquipoResponse) => {
     setEquipoVer(equipo);
     setDetalleAbierto(true);
   };
 
+  // Cierra el modal de alta/edición
   const cerrarForm = () => {
     setFormAbierto(false);
     setEquipoEditar(null);
   };
 
+  // Confirma y da de baja el equipo
   const handleEliminar = async (equipo: EquipoResponse) => {
     const resultado = await Swal.fire({
       title: "¿Eliminar este equipo?",
@@ -110,6 +120,7 @@ function Equipos() {
     }
   };
 
+  // Confirma y restaura un equipo dado de baja
   const handleRestaurar = async (equipo: EquipoResponse) => {
     const resultado = await Swal.fire({
       title: "¿Restaurar este equipo?",
@@ -141,6 +152,7 @@ function Equipos() {
     }
   };
 
+  // Filtra filas por búsqueda, estado y categoría
   const equiposFiltrados = equipos.filter((equipo) => {
     const texto = busqueda.toLowerCase();
 
@@ -157,11 +169,13 @@ function Equipos() {
     return coincideBusqueda && coincideEstado && coincideCategoria;
   });
 
+  // Opciones únicas para los selects de filtro
   const estados = [...new Set(equipos.map((e) => e.estado))];
   const categorias = [...new Set(equipos.map((e) => e.categoria))];
 
   return (
     <div className="equipos-page">
+      {/* Encabezado, vista inactivos y alta de equipo */}
       <div className="equipos-header">
         <div>
           <h1>Inventario de equipos</h1>
@@ -188,6 +202,7 @@ function Equipos() {
       </div>
 
       <div className="equipos-card">
+        {/* Filtros de búsqueda, estado y categoría */}
         <div className="equipos-filtros">
           <TextField
             label="Buscar"
@@ -227,6 +242,7 @@ function Equipos() {
           </Select>
         </div>
 
+        {/* Tabla de equipos */}
         <TableContainer component={Paper} elevation={0}>
           <Table>
             <TableHead>
@@ -265,6 +281,7 @@ function Equipos() {
                     />
                   </TableCell>
                   <TableCell>
+                    {/* Acciones: ver, editar/eliminar o restaurar */}
                     <div className="acciones">
                       <Button
                         variant="outlined"
@@ -309,6 +326,7 @@ function Equipos() {
                 </TableRow>
               ))}
 
+              {/* Empty state: sin resultados */}
               {equiposFiltrados.length === 0 && (
                 <TableRow>
                   <TableCell colSpan={7} align="center">
@@ -325,6 +343,7 @@ function Equipos() {
         </div>
       </div>
 
+      {/* Modales de alta/edición y detalle */}
       <EquipoFormModal
         open={formAbierto}
         onClose={cerrarForm}

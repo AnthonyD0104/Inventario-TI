@@ -5,6 +5,7 @@ import lombok.Data;
 
 @Data
 @Builder
+// DTO response: usuario listo para el frontend
 public class UsuarioResponse {
     private Long idUsuario;
     private String usuario;
@@ -14,5 +15,6 @@ public class UsuarioResponse {
     private String cargo;
     private String rol;
     private String departamento;
+    // Campo: indica si el usuario está activo
     private Boolean activo;
 }

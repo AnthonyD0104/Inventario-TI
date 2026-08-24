@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+// Entidad: departamento de la organización
 @Entity
 @Table(name = "departamento")
 @Getter
@@ -22,6 +23,7 @@ public class Departamento {
     @Column(nullable = false, unique = true, length = 100)
     private String nombre;
 
+    // Soft-delete / habilitación
     @Column(nullable = false)
     private Boolean activo = true;
 }

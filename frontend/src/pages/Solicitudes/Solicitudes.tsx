@@ -1,3 +1,4 @@
+// Página: flujo de solicitudes de alta y asignación
 import { useCallback, useEffect, useState } from "react";
 import {
   Button,
@@ -27,6 +28,7 @@ import CrearUsuarioModal from "./CrearUsuarioModal";
 import AsignarEquipoModal from "./AsignarEquipoModal";
 import "./Solicitudes.css";
 
+// Lee el rol guardado en la sesión
 function getRolSesion(): string {
   try {
     const raw = localStorage.getItem("usuario");
@@ -37,6 +39,7 @@ function getRolSesion(): string {
   }
 }
 
+// Color del chip según el estado
 function colorEstado(estado: string) {
   switch (estado) {
     case "PENDIENTE":
@@ -53,28 +56,33 @@ function colorEstado(estado: string) {
   }
 }
 
+// Formatea fecha ISO a YYYY-MM-DD HH:mm
 function formatFecha(fecha: string) {
   if (!fecha) return "—";
   return String(fecha).replace("T", " ").slice(0, 16);
 }
 
 function Solicitudes() {
+  // Permisos según el rol de la sesión
   const rol = getRolSesion();
   const esAdminOTi = rol === "ADMIN" || rol === "TI";
   const esAdminORrhh = rol === "ADMIN" || rol === "RRHH";
   const puedeCrear = esAdminORrhh;
 
+  // Listado, filtros y carga
   const [solicitudes, setSolicitudes] = useState<SolicitudResponse[]>([]);
   const [busqueda, setBusqueda] = useState("");
   const [estado, setEstado] = useState("");
   const [loading, setLoading] = useState(false);
 
+  // Visibilidad de los tres modales del flujo
   const [formAbierto, setFormAbierto] = useState(false);
   const [crearUsuarioAbierto, setCrearUsuarioAbierto] = useState(false);
   const [asignarAbierto, setAsignarAbierto] = useState(false);
   const [solicitudActiva, setSolicitudActiva] =
     useState<SolicitudResponse | null>(null);
 
+  // Trae las solicitudes desde el backend
   const cargar = useCallback(async () => {
     setLoading(true);
     try {
@@ -96,6 +104,7 @@ function Solicitudes() {
     cargar();
   }, [cargar]);
 
+  // Pide un comentario obligatorio (rechazo o cancelación)
   const pedirComentario = async (titulo: string) => {
     const result = await Swal.fire({
       title: titulo,
@@ -117,6 +126,7 @@ function Solicitudes() {
     return String(result.value).trim();
   };
 
+  // Aprueba una solicitud pendiente
   const handleAprobar = async (s: SolicitudResponse) => {
     const ok = await Swal.fire({
       title: "¿Aprobar solicitud?",
@@ -143,6 +153,7 @@ function Solicitudes() {
     }
   };
 
+  // Rechaza la solicitud con un motivo
   const handleRechazar = async (s: SolicitudResponse) => {
     const comentario = await pedirComentario("Rechazar solicitud");
     if (!comentario) return;
@@ -162,6 +173,7 @@ function Solicitudes() {
     }
   };
 
+  // Cancela la solicitud con un motivo
   const handleCancelar = async (s: SolicitudResponse) => {
     const comentario = await pedirComentario("Cancelar solicitud");
     if (!comentario) return;
@@ -181,6 +193,7 @@ function Solicitudes() {
     }
   };
 
+  // Filtra filas por búsqueda y estado
   const filtradas = solicitudes.filter((s) => {
     const texto = busqueda.toLowerCase();
     const coincideTexto =
@@ -195,6 +208,7 @@ function Solicitudes() {
 
   return (
     <div className="solicitudes-page">
+      {/* Encabezado y alta de solicitud (RRHH/ADMIN) */}
       <div className="solicitudes-header">
         <div>
           <h1>Solicitudes</h1>
@@ -211,6 +225,7 @@ function Solicitudes() {
       </div>
 
       <div className="solicitudes-card">
+        {/* Filtros de búsqueda y estado */}
         <div className="solicitudes-filtros">
           <TextField
             label="Buscar"
@@ -235,6 +250,7 @@ function Solicitudes() {
           </Select>
         </div>
 
+        {/* Tabla de solicitudes */}
         <TableContainer component={Paper} elevation={0}>
           <Table>
             <TableHead>
@@ -270,6 +286,7 @@ function Solicitudes() {
                   <TableCell>{formatFecha(s.fechaSolicitud)}</TableCell>
                   <TableCell>{s.usuarioCreado ?? "—"}</TableCell>
                   <TableCell>
+                    {/* Acciones por rol y estado */}
                     <div className="acciones">
                       {s.estado === "PENDIENTE" && esAdminOTi && (
                         <>
@@ -332,6 +349,7 @@ function Solicitudes() {
                 </TableRow>
               ))}
 
+              {/* Empty state: sin resultados */}
               {!loading && filtradas.length === 0 && (
                 <TableRow>
                   <TableCell colSpan={7} align="center">
@@ -348,6 +366,7 @@ function Solicitudes() {
         </div>
       </div>
 
+      {/* Modales del flujo: crear, usuario y asignar equipo */}
       <SolicitudFormModal
         open={formAbierto}
         onClose={() => setFormAbierto(false)}

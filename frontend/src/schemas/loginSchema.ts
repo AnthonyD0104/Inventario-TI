@@ -1,5 +1,6 @@
 import * as yup from "yup";
 
+// Valida campos del login
 export const loginSchema = yup.object({
     usuario: yup
         .string()

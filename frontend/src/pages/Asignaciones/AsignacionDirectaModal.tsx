@@ -1,3 +1,4 @@
+// Modal: asignación directa de equipo a usuario
 import { useEffect, useState } from "react";
 import {
   Button,
@@ -24,6 +25,7 @@ type Props = {
 };
 
 function AsignacionDirectaModal({ open, onClose, onSaved }: Props) {
+  // Listas y campos del formulario
   const [usuarios, setUsuarios] = useState<UsuarioResponse[]>([]);
   const [equipos, setEquipos] = useState<EquipoResponse[]>([]);
   const [idUsuario, setIdUsuario] = useState<number | "">("");
@@ -35,6 +37,7 @@ function AsignacionDirectaModal({ open, onClose, onSaved }: Props) {
   useEffect(() => {
     if (!open) return;
 
+    // Carga usuarios activos y equipos disponibles al abrir
     const cargar = async () => {
       setError("");
       setIdUsuario("");
@@ -59,6 +62,7 @@ function AsignacionDirectaModal({ open, onClose, onSaved }: Props) {
     cargar();
   }, [open]);
 
+  // Confirma y registra la asignación en el backend
   const handleGuardar = async () => {
     if (!idUsuario || !idEquipo) {
       setError("Selecciona usuario y equipo.");
@@ -106,6 +110,7 @@ function AsignacionDirectaModal({ open, onClose, onSaved }: Props) {
     <Dialog open={open} onClose={onClose} fullWidth maxWidth="sm">
       <DialogTitle>Asignación directa</DialogTitle>
       <DialogContent>
+        {/* Formulario: usuario, equipo disponible y observaciones */}
         <Stack spacing={2} sx={{ mt: 1 }}>
           <TextField
             select
@@ -155,6 +160,7 @@ function AsignacionDirectaModal({ open, onClose, onSaved }: Props) {
           {error && <p style={{ color: "#dc2626", margin: 0 }}>{error}</p>}
         </Stack>
       </DialogContent>
+      {/* Acciones: cancelar o asignar */}
       <DialogActions sx={{ px: 3, pb: 2 }}>
         <Button onClick={onClose} disabled={loading}>
           Cancelar

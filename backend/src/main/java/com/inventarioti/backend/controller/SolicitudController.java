@@ -15,6 +15,7 @@ import com.inventarioti.backend.dto.response.AsignacionEquipoResponse;
 
 import java.util.List;
 
+// Controller: ciclo de vida de solicitudes
 @RestController
 @RequestMapping("/api/solicitudes")
 public class SolicitudController {
@@ -26,12 +27,14 @@ public class SolicitudController {
         this.solicitudService = solicitudService;
         this.asignacionEquipoService = asignacionEquipoService;
     }
+    // GET /api/solicitudes — lista solicitudes
     @GetMapping
     public ResponseEntity<List<SolicitudResponse>> listarSolicitudes(){
         return ResponseEntity.ok(
                 solicitudService.listarSolicitudes()
         );
     }
+    // GET /api/solicitudes/{id} — busca solicitud
     @GetMapping("/{id}")
     public ResponseEntity<SolicitudResponse> buscarSolicitudPorId(
             @PathVariable Long id){
@@ -39,6 +42,7 @@ public class SolicitudController {
                 solicitudService.buscarSolicitudPorId(id)
         );
     }
+    // POST /api/solicitudes — crea solicitud
     @PostMapping
     public ResponseEntity<SolicitudResponse> guardarSolicitud(
             @RequestBody SolicitudRequest request) {
@@ -46,6 +50,7 @@ public class SolicitudController {
                 .status(HttpStatus.CREATED)
                 .body(solicitudService.guardarSolicitud(request));
     }
+    // PUT /api/solicitudes/{id}/aprobar — aprueba solicitud
     @PutMapping("/{id}/aprobar")
     public ResponseEntity<SolicitudResponse> aprobarSolicitud(
             @PathVariable Long id) {
@@ -54,6 +59,7 @@ public class SolicitudController {
                 solicitudService.aprobarSolicitud(id)
         );
     }
+    // PUT /api/solicitudes/{id}/rechazar — rechaza solicitud
     @PutMapping("/{id}/rechazar")
     public ResponseEntity<SolicitudResponse> rechazarSolicitud(
             @PathVariable Long id,
@@ -62,6 +68,7 @@ public class SolicitudController {
                 solicitudService.rechazarSolicitud(id, request)
         );
     }
+    // PUT /api/solicitudes/{id}/cancelar — cancela solicitud
     @PutMapping("/{id}/cancelar")
     public ResponseEntity<SolicitudResponse> cancelarSolicitud(
             @PathVariable Long id,
@@ -70,6 +77,7 @@ public class SolicitudController {
                 solicitudService.cancelarSolicitud(id, request)
         );
     }
+    // POST /api/solicitudes/{id}/crear-usuario — crea usuario desde solicitud
     @PostMapping("/{id}/crear-usuario")
     public ResponseEntity<SolicitudResponse> crearUsuarioSolicitud(
             @PathVariable Long id,
@@ -79,6 +87,7 @@ public class SolicitudController {
                 solicitudService.crearUsuarioSolicitud(id, request)
         );
     }
+    // POST /api/solicitudes/{id}/asignar-equipo — asigna equipo a solicitud
     @PostMapping("/{id}/asignar-equipo")
     public ResponseEntity<AsignacionEquipoResponse> asignarEquipo(
             @PathVariable Long id,

@@ -1,3 +1,4 @@
+// Type: solicitud de equipo (respuesta)
 export interface SolicitudResponse {
   idSolicitud: number;
   nombres: string;
@@ -17,6 +18,7 @@ export interface SolicitudResponse {
   usuarioCreado: string | null;
 }
 
+// Type: datos para crear una solicitud
 export interface SolicitudRequest {
   nombres: string;
   apellidos: string;
@@ -26,15 +28,18 @@ export interface SolicitudRequest {
   idDepartamento: number;
 }
 
+// Type: comentario de rechazo o cancelación
 export interface ComentarioRequest {
   comentario: string;
 }
 
+// Type: datos para crear usuario desde una solicitud
 export interface CrearUsuarioSolicitudRequest {
   usuario: string;
   idRol: number;
 }
 
+// Type: datos para asignar equipo a una solicitud
 export interface AsignacionEquipoRequest {
   idEquipo: number;
   observaciones?: string;

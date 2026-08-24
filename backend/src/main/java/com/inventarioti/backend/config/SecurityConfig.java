@@ -12,6 +12,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+// Configuración: reglas de autenticación y autorización
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
@@ -23,6 +24,7 @@ public class SecurityConfig {
         this.jwtFilter = jwtFilter;
     }
 
+    // Define rutas públicas, roles y el filtro JWT
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws  Exception {
 
@@ -30,6 +32,7 @@ public class SecurityConfig {
                 .cors(Customizer.withDefaults())
                 .csrf(csrf -> csrf.disable())
 
+                // Sesión sin estado (JWT)
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
@@ -79,6 +82,7 @@ public class SecurityConfig {
 
                         .anyRequest().authenticated()
                 )
+                // Inserta el filtro JWT antes de la autenticación básica
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .httpBasic(Customizer.withDefaults());
         return http.build();

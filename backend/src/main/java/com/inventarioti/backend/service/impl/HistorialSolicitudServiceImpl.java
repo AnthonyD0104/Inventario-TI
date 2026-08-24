@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
 
+// Servicio: registro de cambios de solicitudes
 @Service
 public class HistorialSolicitudServiceImpl implements HistorialSolicitudService {
 
@@ -28,6 +29,7 @@ public class HistorialSolicitudServiceImpl implements HistorialSolicitudService 
         this.usuarioRepository = usuarioRepository;
     }
 
+    // Registra un cambio de estado en historial
     @Override
     public void registrarCambio(
             Solicitud solicitud,
@@ -46,6 +48,7 @@ public class HistorialSolicitudServiceImpl implements HistorialSolicitudService 
         historialSolicitudRepository.save(historial);
     }
 
+    // Lista el historial según el rol del usuario
     @Override
     @Transactional(readOnly = true)
     public List<HistorialSolicitudResponse> listarHistorial() {
@@ -61,9 +64,11 @@ public class HistorialSolicitudServiceImpl implements HistorialSolicitudService 
         String rol = usuario.getRol().getNombre();
         List<HistorialSolicitud> historiales;
 
+        // ADMIN y TI ven todo el historial
         if (rol.equals("ADMIN") || rol.equals("TI")) {
             historiales = historialSolicitudRepository
                     .findAllByOrderByFechaCambioDesc();
+        // RRHH solo ve el historial de sus solicitudes
         } else if (rol.equals("RRHH")) {
             historiales = historialSolicitudRepository
                     .findBySolicitudUsuarioRrhhOrderByFechaCambioDesc(usuario);
@@ -78,6 +83,7 @@ public class HistorialSolicitudServiceImpl implements HistorialSolicitudService 
                 .toList();
     }
 
+    // Lista el historial de una solicitud
     @Override
     @Transactional(readOnly = true)
     public List<HistorialSolicitudResponse> listarHistorialPorSolicitud(
@@ -98,6 +104,7 @@ public class HistorialSolicitudServiceImpl implements HistorialSolicitudService 
                 historialSolicitudRepository
                         .findBySolicitudIdSolicitudOrderByFechaCambioAsc(idSolicitud);
 
+        // Filtra por RRHH dueño o exige ADMIN/TI
         if (rol.equals("RRHH")) {
             historiales = historiales.stream()
                     .filter(h -> h.getSolicitud().getUsuarioRrhh() != null

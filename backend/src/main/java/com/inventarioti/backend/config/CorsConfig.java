@@ -8,9 +8,11 @@ import org.springframework.web.cors.CorsConfigurationSource;
 
 import java.util.List;
 
+// Configuración: CORS para el frontend
 @Configuration
 public class CorsConfig {
 
+    // Bean: orígenes, métodos y headers permitidos
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
 

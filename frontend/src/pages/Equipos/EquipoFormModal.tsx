@@ -1,3 +1,4 @@
+// Modal: alta/edición de equipo
 import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -46,9 +47,11 @@ function EquipoFormModal({
 }: EquipoFormModalProps) {
   const esEdicion = equipo !== null;
 
+  // Catálogo de categorías y error de envío
   const [categorias, setCategorias] = useState<CategoriaEquipo[]>([]);
   const [errorGeneral, setErrorGeneral] = useState("");
 
+  // Validación del formulario de equipo
   const {
     control,
     handleSubmit,
@@ -62,6 +65,7 @@ function EquipoFormModal({
   useEffect(() => {
     if (!open) return;
 
+    // Carga categorías y rellena el formulario al abrir
     const prepararModal = async () => {
       setErrorGeneral("");
 
@@ -93,12 +97,14 @@ function EquipoFormModal({
     prepararModal();
   }, [open, equipo, reset]);
 
+  // Limpia el formulario y cierra el modal
   const handleClose = () => {
     reset(valoresVacios);
     setErrorGeneral("");
     onClose();
   };
 
+  // Envía el formulario al backend (crear o actualizar)
   const onSubmit = async (datos: EquipoRequest) => {
     setErrorGeneral("");
 
@@ -151,6 +157,7 @@ function EquipoFormModal({
 
       <form onSubmit={handleSubmit(onSubmit)}>
         <DialogContent>
+          {/* Campos del equipo: identificadores, estado y categoría */}
           <Stack spacing={2} sx={{ mt: 1 }}>
             <Controller
               name="codigoActivo"
@@ -277,6 +284,7 @@ function EquipoFormModal({
           </Stack>
         </DialogContent>
 
+        {/* Acciones: cancelar o guardar */}
         <DialogActions sx={{ px: 3, pb: 2 }}>
           <Button onClick={handleClose} disabled={isSubmitting}>
             Cancelar

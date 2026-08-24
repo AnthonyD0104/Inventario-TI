@@ -1,3 +1,4 @@
+// Type: asignación de equipo a un usuario
 export interface AsignacionEquipoResponse {
   idAsignacion: number;
   idSolicitud: number | null;

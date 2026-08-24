@@ -1,3 +1,4 @@
+// Página: dashboard de inicio según el rol
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import {
@@ -11,6 +12,7 @@ import { obtenerMisEquipos, obtenerAsignaciones } from "../api/asignacion";
 import { obtenerSolicitudes } from "../api/solicitud";
 import { obtenerEquipos } from "../api/equipo";
 
+// Type: usuario leído de localStorage
 type UsuarioSesion = {
   nombres: string;
   apellidos: string;
@@ -18,28 +20,33 @@ type UsuarioSesion = {
   usuario: string;
 };
 
+// Type: enlace rápido del dashboard
 type AccesoRapido = {
   label: string;
   to: string;
 };
 
+// Type: indicador numérico (KPI)
 type KpiItem = {
   key: string;
   label: string;
   value: number;
 };
 
+// Type: tarea pendiente del rol
 type AccionPendiente = {
   key: string;
   label: string;
   count: number;
 };
 
+// Type: resumen que pinta el dashboard
 type DashboardResumen = {
   kpis: KpiItem[];
   accionesPendientes: AccionPendiente[];
 };
 
+// Evita que un fallo de API tumbe el dashboard
 async function cargarSeguro<T>(fn: () => Promise<T>): Promise<T | null> {
   try {
     return await fn();
@@ -48,6 +55,7 @@ async function cargarSeguro<T>(fn: () => Promise<T>): Promise<T | null> {
   }
 }
 
+// Lee el usuario guardado en la sesión
 function getUsuarioSesion(): UsuarioSesion | null {
   try {
     const raw = localStorage.getItem("usuario");
@@ -58,6 +66,7 @@ function getUsuarioSesion(): UsuarioSesion | null {
   }
 }
 
+// Texto de bienvenida según el rol
 function getSubtitulo(rol: string): string {
   switch (rol) {
     case "ADMIN":
@@ -73,6 +82,7 @@ function getSubtitulo(rol: string): string {
   }
 }
 
+// Enlaces rápidos visibles para el rol
 function getAccesosRapidos(rol: string): AccesoRapido[] {
   const accesos: AccesoRapido[] = [];
 
@@ -103,6 +113,7 @@ function getAccesosRapidos(rol: string): AccesoRapido[] {
   return accesos;
 }
 
+// Arma KPIs y pendientes según lo que el rol puede ver
 async function cargarResumen(rol: string): Promise<DashboardResumen> {
   const kpis: KpiItem[] = [];
   const accionesPendientes: AccionPendiente[] = [];
@@ -196,6 +207,7 @@ async function cargarResumen(rol: string): Promise<DashboardResumen> {
   return { kpis, accionesPendientes };
 }
 
+// Placeholder de KPIs mientras carga
 function HomeKpiSkeleton() {
   return (
     <div className="home-kpi-grid">
@@ -216,6 +228,7 @@ function Home() {
   const rol = usuario?.rol ?? "";
   const accesos = getAccesosRapidos(rol);
 
+  // Resumen del dashboard
   const [cargando, setCargando] = useState(true);
   const [resumen, setResumen] = useState<DashboardResumen>({
     kpis: [],
@@ -225,6 +238,7 @@ function Home() {
   useEffect(() => {
     let activo = true;
 
+    // Carga el resumen al montar o al cambiar de rol
     const cargar = async () => {
       setCargando(true);
       const data = await cargarResumen(rol);
@@ -245,6 +259,7 @@ function Home() {
 
   return (
     <div className="home-page">
+      {/* Saludo y rol de la sesión */}
       <header className="home-header">
         <h1>
           Bienvenido, {usuario?.nombres} {usuario?.apellidos}
@@ -257,6 +272,7 @@ function Home() {
         <p className="home-subtitle">{getSubtitulo(rol)}</p>
       </header>
 
+      {/* Indicadores KPI */}
       <section className="home-section home-card">
         <h2>Resumen</h2>
         {cargando ? (
@@ -277,6 +293,7 @@ function Home() {
         )}
       </section>
 
+      {/* Acciones pendientes (solo ADMIN/TI) */}
       {esTiOAdmin && !cargando && (
         <section className="home-section home-card">
           <h2>Acciones pendientes</h2>
@@ -303,6 +320,7 @@ function Home() {
         </section>
       )}
 
+      {/* Accesos rápidos por rol */}
       <section className="home-card">
         <h2>Accesos rápidos</h2>
         <div className="home-actions">

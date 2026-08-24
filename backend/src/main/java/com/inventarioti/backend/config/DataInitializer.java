@@ -10,6 +10,7 @@ import com.inventarioti.backend.repository.RolRepository;
 import com.inventarioti.backend.repository.UsuarioRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+// Configuración: datos iniciales al arrancar
 @Component
 public class DataInitializer implements CommandLineRunner {
 
@@ -30,12 +31,14 @@ public class DataInitializer implements CommandLineRunner {
         this.passwordEncoder = passwordEncoder;
     }
 
+    // Punto de entrada al iniciar la aplicación
     @Override
     public void run(String... args) {
         System.out.println("Inicializando administrador...");
 
         crearAdminSiNoExiste();
     }
+    // Crea el usuario admin si no existe
     private void crearAdminSiNoExiste() {
         if (usuarioRepository.findByUsuario("admin").isEmpty()) {
             Rol rolAdmin = rolRepository.findByNombre("ADMIN")

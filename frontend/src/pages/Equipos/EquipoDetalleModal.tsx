@@ -1,3 +1,4 @@
+// Modal: detalle de equipo (solo lectura)
 import {
   Button,
   Dialog,
@@ -28,6 +29,7 @@ function EquipoDetalleModal({
       <DialogTitle>Detalle del equipo</DialogTitle>
 
       <DialogContent>
+        {/* Datos del equipo */}
         <Stack spacing={1.5} sx={{ mt: 1 }}>
           <Campo label="Código" valor={equipo.codigoActivo} />
           <Campo label="N.º serie" valor={equipo.numeroSerie} />
@@ -55,6 +57,7 @@ function EquipoDetalleModal({
   );
 }
 
+// Fila etiqueta-valor del detalle
 function Campo({ label, valor }: { label: string; valor: string }) {
   return (
     <div>

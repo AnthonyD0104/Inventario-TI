@@ -8,9 +8,11 @@ import com.inventarioti.backend.dto.response.ErrorResponse;
 
 import java.time.LocalDateTime;
 
+// Manejador: convierte excepciones a respuestas HTTP
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
+    // Responde 404 cuando no existe el recurso
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<ErrorResponse> manejarRecursoNoEncontrado(ResourceNotFoundException ex) {
 
@@ -23,6 +25,7 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
     }
 
+    // Responde 400 ante peticiones inválidas
     @ExceptionHandler(BadRequestException.class)
     public ResponseEntity<ErrorResponse> manejarBadRequest(BadRequestException ex) {
 

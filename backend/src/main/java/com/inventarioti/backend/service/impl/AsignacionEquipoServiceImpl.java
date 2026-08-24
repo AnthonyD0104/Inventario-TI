@@ -23,6 +23,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
 
+// Servicio: lógica de asignación de equipos
 @Service
 public class AsignacionEquipoServiceImpl
         implements AsignacionEquipoService {
@@ -47,6 +48,7 @@ public class AsignacionEquipoServiceImpl
         this.historialSolicitudService = historialSolicitudService;
     }
 
+    // Asigna un equipo a una solicitud procesada
     @Override
     @PreAuthorize("hasAnyRole('ADMIN', 'TI')")
     public AsignacionEquipoResponse asignarEquipo(
@@ -58,6 +60,7 @@ public class AsignacionEquipoServiceImpl
                         new ResourceNotFoundException(
                                 "Solicitud no encontrada"));
 
+        // Valida que la solicitud esté PROCESADA
         if (!solicitud.getEstado().equals("PROCESADA")) {
             throw new RuntimeException(
                     "Solo las solicitudes procesadas pueden recibir equipos.");
@@ -78,6 +81,7 @@ public class AsignacionEquipoServiceImpl
             throw new RuntimeException(
                     "El equipo no está activo.");
         }
+        // Valida que el equipo esté disponible
         if (!equipo.getEstado().equals("DISPONIBLE")) {
             throw new RuntimeException(
                     "El equipo no está disponible para asignación."
@@ -109,6 +113,7 @@ public class AsignacionEquipoServiceImpl
         AsignacionEquipo asignacionGuardada =
                 asignacionEquipoRepository.save(asignacion);
 
+        // Marca el equipo como ASIGNADO
         equipo.setEstado("ASIGNADO");
         equipoRepository.save(equipo);
 
@@ -119,6 +124,7 @@ public class AsignacionEquipoServiceImpl
         Solicitud solicitudGuardada =
                 solicitudRepository.save(solicitud);
 
+        // Finaliza la solicitud y registra historial
         historialSolicitudService.registrarCambio(
                 solicitudGuardada,
                 usuarioTi,
@@ -130,6 +136,7 @@ public class AsignacionEquipoServiceImpl
         return AsignacionEquipoMapper.toResponse(
                 asignacionGuardada);
     }
+    // Asigna un equipo a un usuario sin solicitud
     @Override
     @PreAuthorize("hasAnyRole('ADMIN', 'TI')")
     public AsignacionEquipoResponse asignarEquipoDirectamente(
@@ -139,6 +146,7 @@ public class AsignacionEquipoServiceImpl
                 .orElseThrow(() ->
                         new ResourceNotFoundException(
                                 "Usuario no encontrado"));
+        // Valida que el usuario esté activo
         if (!usuario.getActivo()) {
             throw new RuntimeException(
                     "El usuario no está activo.");
@@ -152,6 +160,7 @@ public class AsignacionEquipoServiceImpl
             throw new RuntimeException(
                     "El equipo no está activo.");
         }
+        // Valida que el equipo esté disponible
         if (!equipo.getEstado().equals("DISPONIBLE")) {
             throw new RuntimeException(
                     "El equipo no está disponible para asignación.");
@@ -183,6 +192,7 @@ public class AsignacionEquipoServiceImpl
                 asignacionGuardada);
     }
 
+    // Lista todas las asignaciones
     @Override
     public List<AsignacionEquipoResponse> listarAsignaciones() {
         return asignacionEquipoRepository.findAll()
@@ -191,6 +201,7 @@ public class AsignacionEquipoServiceImpl
                 .toList();
     }
 
+    // Lista equipos activos de un usuario
     @Override
     public List<AsignacionEquipoResponse> listarEquiposPorUsuario(
             Long idUsuario) {
@@ -207,6 +218,7 @@ public class AsignacionEquipoServiceImpl
                 .toList();
     }
 
+    // Lista el historial de asignaciones de un equipo
     @Override
     public List<AsignacionEquipoResponse> listarHistorialEquipo(
             Long idEquipo) {
@@ -222,6 +234,7 @@ public class AsignacionEquipoServiceImpl
                 .map(AsignacionEquipoMapper::toResponse)
                 .toList();
     }
+    // Lista los equipos activos del usuario autenticado
     @Override
     public List<AsignacionEquipoResponse> listarMisEquipos() {
 
@@ -243,6 +256,7 @@ public class AsignacionEquipoServiceImpl
                 .map(AsignacionEquipoMapper::toResponse)
                 .toList();
     }
+    // Devuelve el equipo y lo marca DISPONIBLE
     @Override
     @PreAuthorize("hasAnyRole('ADMIN', 'TI')")
     public void devolverEquipo(Long idAsignacion) {
@@ -253,6 +267,7 @@ public class AsignacionEquipoServiceImpl
                                 new ResourceNotFoundException(
                                         "Asignación no encontrada"));
 
+        // Valida que la asignación esté ACTIVA
         if (!asignacion.getEstado().equals("ACTIVA")) {
             throw new RuntimeException(
                     "La asignación no está activa.");

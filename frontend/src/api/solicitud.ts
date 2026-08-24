@@ -8,11 +8,13 @@ import type {
 } from "../types/solicitud";
 import type { AsignacionEquipoResponse } from "../types/asignacion";
 
+// GET solicitudes — lista solicitudes
 export const obtenerSolicitudes = async (): Promise<SolicitudResponse[]> => {
   const response = await api.get<SolicitudResponse[]>("/solicitudes");
   return response.data;
 };
 
+// POST solicitud — crea una solicitud
 export const crearSolicitud = async (
   datos: SolicitudRequest
 ): Promise<SolicitudResponse> => {
@@ -20,6 +22,7 @@ export const crearSolicitud = async (
   return response.data;
 };
 
+// PUT aprobar — aprueba la solicitud
 export const aprobarSolicitud = async (
   id: number
 ): Promise<SolicitudResponse> => {
@@ -27,6 +30,7 @@ export const aprobarSolicitud = async (
   return response.data;
 };
 
+// PUT rechazar — rechaza la solicitud con comentario
 export const rechazarSolicitud = async (
   id: number,
   datos: ComentarioRequest
@@ -38,6 +42,7 @@ export const rechazarSolicitud = async (
   return response.data;
 };
 
+// PUT cancelar — cancela la solicitud con comentario
 export const cancelarSolicitud = async (
   id: number,
   datos: ComentarioRequest
@@ -49,6 +54,7 @@ export const cancelarSolicitud = async (
   return response.data;
 };
 
+// POST crear-usuario — crea usuario desde la solicitud
 export const crearUsuarioDesdeSolicitud = async (
   id: number,
   datos: CrearUsuarioSolicitudRequest
@@ -60,6 +66,7 @@ export const crearUsuarioDesdeSolicitud = async (
   return response.data;
 };
 
+// POST asignar-equipo — asigna equipo a la solicitud
 export const asignarEquipoSolicitud = async (
   id: number,
   datos: AsignacionEquipoRequest

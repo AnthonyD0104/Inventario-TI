@@ -27,6 +27,7 @@ import com.inventarioti.backend.entity.Rol;
 import java.time.LocalDateTime;
 import java.util.List;
 
+// Servicio: lógica de solicitudes de equipos
 @Service
 public class SolicitudServiceImpl implements SolicitudService {
     private final SolicitudRepository solicitudRepository;
@@ -50,6 +51,7 @@ public class SolicitudServiceImpl implements SolicitudService {
         this.rolRepository = rolRepository;
         this.passwordEncoder = passwordEncoder;
     }
+    // Lista solicitudes según el rol del usuario
     @Override
     public List<SolicitudResponse> listarSolicitudes() {
         Authentication authentication =
@@ -61,6 +63,7 @@ public class SolicitudServiceImpl implements SolicitudService {
                         new RuntimeException("Usuario no encontrado"));
         String rol = usuario.getRol().getNombre();
         List<Solicitud> solicitudes;
+        // ADMIN y TI ven todas; RRHH solo las suyas
         if (rol.equals("ADMIN") || rol.equals("TI")) {
             solicitudes = solicitudRepository.findAll();
         } else if (rol.equals("RRHH")) {
@@ -72,6 +75,7 @@ public class SolicitudServiceImpl implements SolicitudService {
                 .map(SolicitudMapper::toResponse)
                 .toList();
     }
+    // Busca una solicitud por su ID
     @Override
     public SolicitudResponse buscarSolicitudPorId(Long id) {
 
@@ -82,6 +86,7 @@ public class SolicitudServiceImpl implements SolicitudService {
         return SolicitudMapper.toResponse(solicitud);
     }
 
+    // Crea una solicitud en estado PENDIENTE
     @Override
     public SolicitudResponse guardarSolicitud(SolicitudRequest request) {
 
@@ -120,6 +125,7 @@ public class SolicitudServiceImpl implements SolicitudService {
         Solicitud solicitudGuardada =
                 solicitudRepository.save(solicitud);
 
+        // Registra el cambio en historial
         historialSolicitudService.registrarCambio(
                 solicitudGuardada,
                 usuarioRrhh,
@@ -130,6 +136,7 @@ public class SolicitudServiceImpl implements SolicitudService {
 
         return SolicitudMapper.toResponse(solicitudGuardada);
     }
+    // Aprueba la solicitud y registra historial
     @Override
     @PreAuthorize("hasAnyRole('ADMIN', 'TI')")
     public SolicitudResponse aprobarSolicitud(Long id){
@@ -159,6 +166,7 @@ public class SolicitudServiceImpl implements SolicitudService {
     );
     return SolicitudMapper.toResponse(solicitudGuardada);
     }
+    // Rechaza la solicitud con un motivo
     @Override
     @PreAuthorize("hasAnyRole('ADMIN', 'TI')")
     public SolicitudResponse rechazarSolicitud(
@@ -167,9 +175,11 @@ public class SolicitudServiceImpl implements SolicitudService {
         Solicitud solicitud = solicitudRepository.findById(id)
                 .orElseThrow(() ->
                         new RuntimeException("Solicitud no encontrada"));
+        // Valida que esté PENDIENTE
         if (!solicitud.getEstado().equals("PENDIENTE")) {
             throw new RuntimeException("Solo las solicitudes pendientes pueden rechazarse.");
         }
+        // Valida que haya un motivo de rechazo
         if (request.getComentario() == null ||
                 request.getComentario().trim().isEmpty()) {
 
@@ -201,6 +211,7 @@ public class SolicitudServiceImpl implements SolicitudService {
         );
         return SolicitudMapper.toResponse(solicitudGuardada);
     }
+    // Crea el usuario de una solicitud aprobada
     @Override
     @PreAuthorize("hasAnyRole('ADMIN', 'TI')")
     public SolicitudResponse crearUsuarioSolicitud(
@@ -209,16 +220,19 @@ public class SolicitudServiceImpl implements SolicitudService {
         Solicitud solicitud = solicitudRepository.findById(id)
                 .orElseThrow(() ->
                         new ResourceNotFoundException("Solicitud no encontrada"));
+        // Valida que la solicitud esté APROBADA
         if (!solicitud.getEstado().equals("APROBADA")) {
             throw new RuntimeException(
                     "Solo se pueden crear usuarios desde solicitudes aprobadas"
             );
         }
+        // Valida que no tenga usuario creado
         if (solicitud.getUsuarioCreado() != null) {
             throw new RuntimeException(
                     "Esta solicitud ya tiene un usuario creado"
             );
         }
+        // Valida que el username no exista
         if (usuarioRepository.findByUsuario(request.getUsuario()).isPresent()) {
             throw new RuntimeException(
                     "El nombre de usuario ya existe"
@@ -255,6 +269,7 @@ public class SolicitudServiceImpl implements SolicitudService {
         solicitud.setUsuarioCreado(usuarioGuardado);
         solicitud.setUsuarioTi(usuarioTi);
         String estadoAnterior = solicitud.getEstado();
+        // Marca la solicitud como PROCESADA
         solicitud.setEstado("PROCESADA");
         Solicitud solicitudGuardada =
                 solicitudRepository.save(solicitud);
@@ -269,6 +284,7 @@ public class SolicitudServiceImpl implements SolicitudService {
 
         return SolicitudMapper.toResponse(solicitudGuardada);
     }
+    // Cancela la solicitud con un motivo
     @Override
     @PreAuthorize("hasAnyRole('ADMIN', 'RRHH')")
     public SolicitudResponse cancelarSolicitud(
@@ -277,6 +293,7 @@ public class SolicitudServiceImpl implements SolicitudService {
         Solicitud solicitud = solicitudRepository.findById(id)
                 .orElseThrow(()->
                         new RuntimeException("Solicitud no encontrada"));
+        // Valida que esté PENDIENTE
         if(!solicitud.getEstado().equals("PENDIENTE")){
             throw new RuntimeException(
                     "Solo las solicitudes pendientes pueden cancelarse"
@@ -297,6 +314,7 @@ public class SolicitudServiceImpl implements SolicitudService {
                 .orElseThrow(() ->
                         new RuntimeException("Usuario no encontrado"));
         String rol = usuarioAutenticado.getRol().getNombre();
+        // RRHH solo puede cancelar las suyas
         if (rol.equals("RRHH")) {
             if (!solicitud.getUsuarioRrhh()
                     .getIdUsuario()

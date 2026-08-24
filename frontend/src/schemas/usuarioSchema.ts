@@ -1,5 +1,6 @@
 import * as yup from "yup";
 
+// Valida campos del formulario de usuario
 export const usuarioSchema = yup.object({
   usuario: yup
     .string()

@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+// Entidad: usuario del sistema
 @Entity
 @Table(name = "usuario")
 @Setter
@@ -38,13 +39,16 @@ public class Usuario {
     @Column(nullable = false)
     private String cargo;
 
+    // Soft-delete / habilitación
     @Column(nullable = false)
     private Boolean activo = true;
 
+    // FK: rol de acceso
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_rol", nullable = false)
     private Rol rol;
 
+    // FK: departamento
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_departamento", nullable = false)
     private Departamento departamento;

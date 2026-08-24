@@ -5,6 +5,7 @@ import lombok.Data;
 
 import java.time.LocalDateTime;
 
+// Entidad: cambio de estado de una solicitud
 @Entity
 @Table(name = "historial_solicitud")
 @Data
@@ -15,10 +16,12 @@ public class HistorialSolicitud {
     @Column(name = "id_historial")
     private Long idHistorial;
 
+    // FK: solicitud afectada
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_solicitud", nullable = false)
     private Solicitud solicitud;
 
+    // FK: usuario que hizo el cambio
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_usuario", nullable = false)
     private Usuario usuario;

@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+// Servicio: lógica de usuarios del sistema
 @Service
 public class UsuarioServiceImpl implements UsuarioService {
 
@@ -35,6 +36,7 @@ public class UsuarioServiceImpl implements UsuarioService {
         this.passwordEncoder = passwordEncoder;
     }
 
+    // Lista todos los usuarios
     @Override
     public List<UsuarioResponse> listarUsuarios() {
         return usuarioRepository.findAll()
@@ -43,6 +45,7 @@ public class UsuarioServiceImpl implements UsuarioService {
                 .toList();
     }
 
+    // Busca un usuario por su ID
     @Override
     public UsuarioResponse buscarUsuarioPorId(Long id) {
 
@@ -51,6 +54,7 @@ public class UsuarioServiceImpl implements UsuarioService {
         return UsuarioMapper.toResponse(usuario);
     }
 
+    // Crea un usuario con contraseña cifrada
     @Override
     public UsuarioResponse guardarUsuario(UsuarioRequest request) {
 
@@ -62,6 +66,7 @@ public class UsuarioServiceImpl implements UsuarioService {
         Usuario usuario = new Usuario();
 
         usuario.setUsuario(request.getUsuario());
+        // Cifra la contraseña con BCrypt
         usuario.setPassword(
                 passwordEncoder.encode(request.getPassword())
         );
@@ -78,6 +83,7 @@ public class UsuarioServiceImpl implements UsuarioService {
         return UsuarioMapper.toResponse(usuarioGuardado);
     }
 
+    // Actualiza datos y recifra la contraseña
     @Override
     public UsuarioResponse actualizarUsuario(Long id, UsuarioRequest request) {
 
@@ -103,6 +109,7 @@ public class UsuarioServiceImpl implements UsuarioService {
         return UsuarioMapper.toResponse(actualizado);
     }
 
+    // Elimina un usuario por ID
     @Override
     public void eliminarUsuario(Long id) {
 

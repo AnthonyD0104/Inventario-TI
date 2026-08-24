@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+// Controller: consulta de historial de solicitudes
 @RestController
 @RequestMapping("/api/historial-solicitudes")
 public class HistorialSolicitudController {
@@ -18,6 +19,7 @@ public class HistorialSolicitudController {
         this.historialSolicitudService = historialSolicitudService;
     }
 
+    // GET /api/historial-solicitudes — lista todo el historial
     @GetMapping
     public ResponseEntity<List<HistorialSolicitudResponse>> listarHistorial() {
         return ResponseEntity.ok(
@@ -25,6 +27,7 @@ public class HistorialSolicitudController {
         );
     }
 
+    // GET /api/historial-solicitudes/solicitud/{idSolicitud} — historial por solicitud
     @GetMapping("/solicitud/{idSolicitud}")
     public ResponseEntity<List<HistorialSolicitudResponse>> listarPorSolicitud(
             @PathVariable Long idSolicitud) {

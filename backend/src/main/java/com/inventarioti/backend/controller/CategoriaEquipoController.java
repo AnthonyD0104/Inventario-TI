@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
+// Controller: CRUD de categorías de equipo
 @RestController
 @RequestMapping("/api/categorias")
 public class CategoriaEquipoController {
@@ -20,6 +21,7 @@ public class CategoriaEquipoController {
         this.categoriaEquipoService = categoriaEquipoService;
     }
 
+    // GET /api/categorias — lista categorías
     @GetMapping
     public ResponseEntity<List<CategoriaEquipo>> listarCat() {
 
@@ -28,6 +30,7 @@ public class CategoriaEquipoController {
         return ResponseEntity.ok(categoriaEquipos);
     }
 
+    // GET /api/categorias/{id} — busca categoría
     @GetMapping("/{id}")
     public ResponseEntity<CategoriaEquipo> buscarCatPorId(@PathVariable Long id) {
 
@@ -36,6 +39,7 @@ public class CategoriaEquipoController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    // POST /api/categorias — crea categoría
     @PostMapping
     public ResponseEntity<CategoriaEquipo> guardarCat(@RequestBody CategoriaEquipo categoriaEquipo) {
 
@@ -46,6 +50,7 @@ public class CategoriaEquipoController {
                 .body(nuevaCat);
     }
 
+    // PUT /api/categorias/{id} — actualiza categoría
     @PutMapping("/{id}")
     public ResponseEntity<CategoriaEquipo> actualizarCat(
             @PathVariable Long id,
@@ -59,6 +64,7 @@ public class CategoriaEquipoController {
         return ResponseEntity.ok(actualizado);
     }
 
+    // DELETE /api/categorias/{id} — elimina categoría
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> eliminarCat(@PathVariable Long id) {
         if (categoriaEquipoService.buscarCatPorId(id).isEmpty()){

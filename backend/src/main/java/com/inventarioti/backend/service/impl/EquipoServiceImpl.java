@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+// Servicio: lógica de inventario de equipos
 @Service
 public class EquipoServiceImpl implements EquipoService {
     private final EquipoRepository equipoRepository;
@@ -24,6 +25,7 @@ public class EquipoServiceImpl implements EquipoService {
         this.equipoRepository = equipoRepository;
         this.categoriaEquipoRepository = categoriaEquipoRepository;
     }
+    // Lista los equipos activos
     @Override
     public List<EquipoResponse> listarEquipos(){
         return equipoRepository.findByActivoTrue()
@@ -32,6 +34,7 @@ public class EquipoServiceImpl implements EquipoService {
                 .toList();
     }
 
+    // Lista los equipos inactivos
     @Override
     public List<EquipoResponse> listarEquiposInactivos() {
         return equipoRepository.findByActivoFalse()
@@ -39,6 +42,7 @@ public class EquipoServiceImpl implements EquipoService {
                 .map(EquipoMapper::toResponse)
                 .toList();
     }
+    // Busca un equipo por su ID
     @Override
     public EquipoResponse buscarEquipoPorId(Long id){
         Equipo equipo = equipoRepository.findById(id)
@@ -46,6 +50,7 @@ public class EquipoServiceImpl implements EquipoService {
                         new RuntimeException("Equipo no encontrado"));
         return EquipoMapper.toResponse(equipo);
     }
+    // Crea un equipo y lo marca activo
     @Override
     public EquipoResponse guardarEquipo(EquipoRequest request){
         CategoriaEquipo categoria = categoriaEquipoRepository
@@ -66,6 +71,7 @@ public class EquipoServiceImpl implements EquipoService {
         Equipo equipoGuardado = equipoRepository.save(equipo);
         return EquipoMapper.toResponse(equipoGuardado);
     }
+    // Actualiza los datos de un equipo
     @Override
     public EquipoResponse actualizarEquipo(
             Long id,
@@ -88,6 +94,7 @@ public class EquipoServiceImpl implements EquipoService {
         Equipo equipoActualizado = equipoRepository.save(equipo);
         return EquipoMapper.toResponse(equipoActualizado);
     }
+    // Desactiva el equipo (baja lógica)
     @Override
     public void eliminarEquipo(Long id){
         Equipo equipo = equipoRepository.findById(id)
@@ -97,6 +104,7 @@ public class EquipoServiceImpl implements EquipoService {
         equipoRepository.save(equipo);
     }
 
+    // Reactiva un equipo inactivo
     @Override
     public EquipoResponse restaurarEquipo(Long id) {
         Equipo equipo = equipoRepository.findById(id)

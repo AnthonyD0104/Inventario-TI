@@ -1,3 +1,4 @@
+// Modal: alta de solicitud de equipo
 import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -35,9 +36,11 @@ const vacio: SolicitudRequest = {
 };
 
 function SolicitudFormModal({ open, onClose, onSaved }: Props) {
+  // Departamentos activos y error de envío
   const [departamentos, setDepartamentos] = useState<Departamento[]>([]);
   const [errorGeneral, setErrorGeneral] = useState("");
 
+  // Validación del formulario de solicitud
   const {
     control,
     handleSubmit,
@@ -51,6 +54,7 @@ function SolicitudFormModal({ open, onClose, onSaved }: Props) {
   useEffect(() => {
     if (!open) return;
 
+    // Carga departamentos y limpia el formulario al abrir
     const cargar = async () => {
       setErrorGeneral("");
       try {
@@ -66,12 +70,14 @@ function SolicitudFormModal({ open, onClose, onSaved }: Props) {
     cargar();
   }, [open, reset]);
 
+  // Limpia el formulario y cierra el modal
   const handleClose = () => {
     reset(vacio);
     setErrorGeneral("");
     onClose();
   };
 
+  // Envía la solicitud al backend
   const onSubmit = async (datos: SolicitudRequest) => {
     setErrorGeneral("");
 
@@ -107,6 +113,7 @@ function SolicitudFormModal({ open, onClose, onSaved }: Props) {
       <DialogTitle>Nueva solicitud de equipo</DialogTitle>
       <form onSubmit={handleSubmit(onSubmit)}>
         <DialogContent>
+          {/* Datos del colaborador y departamento */}
           <Stack spacing={2} sx={{ mt: 1 }}>
             <Controller
               name="nombres"
@@ -200,6 +207,7 @@ function SolicitudFormModal({ open, onClose, onSaved }: Props) {
             )}
           </Stack>
         </DialogContent>
+        {/* Acciones: cancelar o crear solicitud */}
         <DialogActions sx={{ px: 3, pb: 2 }}>
           <Button onClick={handleClose} disabled={isSubmitting}>
             Cancelar

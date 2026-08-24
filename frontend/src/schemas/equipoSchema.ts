@@ -1,5 +1,6 @@
 import * as yup from "yup";
 
+// Valida campos del formulario de equipo
 export const equipoSchema = yup.object({
     codigoActivo: yup
         .string()

@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+// Controller: CRUD de equipos
 @RestController
 @RequestMapping("/api/equipos")
 public class EquipoController {
@@ -19,6 +20,7 @@ public class EquipoController {
         this.equipoService = equipoService;
     }
 
+    // GET /api/equipos — lista inventario activo
     @GetMapping
     public ResponseEntity<List<EquipoResponse>> listarEquipos(){
         return ResponseEntity.ok(
@@ -26,6 +28,7 @@ public class EquipoController {
         );
     }
 
+    // GET /api/equipos/inactivos — lista equipos dados de baja
     @GetMapping("/inactivos")
     public ResponseEntity<List<EquipoResponse>> listarEquiposInactivos() {
         return ResponseEntity.ok(
@@ -33,6 +36,7 @@ public class EquipoController {
         );
     }
 
+    // GET /api/equipos/{id} — busca equipo
     @GetMapping("/{id}")
     public ResponseEntity<EquipoResponse> buscarEquipoPorId(
             @PathVariable Long id) {
@@ -40,6 +44,7 @@ public class EquipoController {
                 equipoService.buscarEquipoPorId(id)
         );
     }
+    // POST /api/equipos — crea equipo
     @PostMapping
     public ResponseEntity<EquipoResponse> guardarEquipo(
             @RequestBody EquipoRequest request) {
@@ -47,6 +52,7 @@ public class EquipoController {
                 .status(HttpStatus.CREATED)
                 .body(equipoService.guardarEquipo(request));
     }
+    // PUT /api/equipos/{id} — actualiza equipo
     @PutMapping("/{id}")
     public ResponseEntity<EquipoResponse> actualizarEquipo(
             @PathVariable Long id,
@@ -55,6 +61,7 @@ public class EquipoController {
                 equipoService.actualizarEquipo(id, request)
         );
     }
+    // DELETE /api/equipos/{id} — soft-delete de equipo
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> eliminarEquipos(
             @PathVariable long id){
@@ -62,6 +69,7 @@ public class EquipoController {
         return ResponseEntity.noContent().build();
     }
 
+    // PUT /api/equipos/{id}/restaurar — restaura equipo inactivo
     @PutMapping("/{id}/restaurar")
     public ResponseEntity<EquipoResponse> restaurarEquipo(
             @PathVariable Long id) {

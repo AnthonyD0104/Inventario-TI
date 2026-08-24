@@ -1,5 +1,6 @@
 import * as yup from "yup";
 
+// Valida campos de una solicitud
 export const solicitudSchema = yup.object({
   nombres: yup.string().required("Los nombres son obligatorios").trim(),
   apellidos: yup.string().required("Los apellidos son obligatorios").trim(),
@@ -17,6 +18,7 @@ export const solicitudSchema = yup.object({
     .positive("Selecciona un departamento"),
 });
 
+// Valida usuario y rol al crear usuario desde solicitud
 export const crearUsuarioSolicitudSchema = yup.object({
   usuario: yup.string().required("El usuario es obligatorio").trim(),
   idRol: yup

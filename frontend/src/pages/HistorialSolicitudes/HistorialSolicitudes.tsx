@@ -1,3 +1,4 @@
+// Página: historial de cambios de solicitudes
 import { useCallback, useEffect, useState } from "react";
 import {
   Chip,
@@ -18,6 +19,7 @@ import { obtenerHistorialSolicitudes } from "../../api/historial";
 import type { HistorialSolicitudResponse } from "../../types/historial";
 import "./HistorialSolicitudes.css";
 
+// Lee el rol guardado en la sesión
 function getRolSesion(): string {
   try {
     const raw = localStorage.getItem("usuario");
@@ -33,6 +35,7 @@ function formatFecha(fecha: string) {
   return String(fecha).replace("T", " ").slice(0, 19);
 }
 
+// Color del chip según el estado
 function colorEstado(estado: string | null) {
   if (!estado) return "default";
   switch (estado) {
@@ -53,11 +56,13 @@ function colorEstado(estado: string | null) {
 function HistorialSolicitudes() {
   const rol = getRolSesion();
 
+  // Listado, filtros y carga
   const [historial, setHistorial] = useState<HistorialSolicitudResponse[]>([]);
   const [busqueda, setBusqueda] = useState("");
   const [estado, setEstado] = useState("");
   const [loading, setLoading] = useState(false);
 
+  // Trae el historial desde el backend
   const cargar = useCallback(async () => {
     setLoading(true);
     try {
@@ -79,6 +84,7 @@ function HistorialSolicitudes() {
     cargar();
   }, [cargar]);
 
+  // Filtra filas por búsqueda y estado nuevo
   const filtrados = historial.filter((h) => {
     const texto = busqueda.toLowerCase();
     const coincideTexto =
@@ -99,6 +105,7 @@ function HistorialSolicitudes() {
 
   return (
     <div className="historial-page">
+      {/* Encabezado; el subtítulo cambia si el rol es RRHH */}
       <div className="historial-header">
         <div>
           <h1>Historial de solicitudes</h1>
@@ -107,6 +114,7 @@ function HistorialSolicitudes() {
       </div>
 
       <div className="historial-card">
+        {/* Filtros de búsqueda y estado */}
         <div className="historial-filtros">
           <TextField
             label="Buscar"
@@ -131,6 +139,7 @@ function HistorialSolicitudes() {
           </Select>
         </div>
 
+        {/* Tabla de auditoría */}
         <TableContainer component={Paper} elevation={0}>
           <Table>
             <TableHead>
@@ -178,6 +187,7 @@ function HistorialSolicitudes() {
                 </TableRow>
               ))}
 
+              {/* Empty state: sin registros */}
               {!loading && filtrados.length === 0 && (
                 <TableRow>
                   <TableCell colSpan={8} align="center">

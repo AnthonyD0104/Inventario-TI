@@ -1,3 +1,4 @@
+// Página: listado y administración de usuarios
 import { useCallback, useEffect, useState } from "react";
 import {
   Button,
@@ -23,17 +24,20 @@ import UsuarioFormModal from "./UsuarioFormModal";
 import "./Usuarios.css";
 
 function Usuarios() {
+  // Listado y filtros
   const [usuarios, setUsuarios] = useState<UsuarioResponse[]>([]);
   const [busqueda, setBusqueda] = useState("");
   const [rol, setRol] = useState("");
   const [departamento, setDepartamento] = useState("");
   const [activo, setActivo] = useState("");
 
+  // Modal de alta/edición
   const [formAbierto, setFormAbierto] = useState(false);
   const [usuarioEditar, setUsuarioEditar] = useState<UsuarioResponse | null>(
     null
   );
 
+  // Trae los usuarios desde el backend
   const cargar = useCallback(async () => {
     try {
       const data = await obtenerUsuarios();
@@ -51,11 +55,13 @@ function Usuarios() {
     cargar();
   }, [cargar]);
 
+  // Abre el modal de creación
   const abrirCrear = () => {
     setUsuarioEditar(null);
     setFormAbierto(true);
   };
 
+  // Abre el modal en modo edición
   const abrirEditar = (usuario: UsuarioResponse) => {
     setUsuarioEditar(usuario);
     setFormAbierto(true);
@@ -66,6 +72,7 @@ function Usuarios() {
     setUsuarioEditar(null);
   };
 
+  // Confirma y elimina el usuario
   const handleEliminar = async (usuario: UsuarioResponse) => {
     const ok = await Swal.fire({
       title: "¿Eliminar este usuario?",
@@ -98,6 +105,7 @@ function Usuarios() {
     }
   };
 
+  // Filtra filas por búsqueda, rol, departamento y estado
   const filtrados = usuarios.filter((u) => {
     const texto = busqueda.toLowerCase();
     const coincideTexto =
@@ -118,6 +126,7 @@ function Usuarios() {
 
   return (
     <div className="usuarios-page">
+      {/* Encabezado y alta de usuario */}
       <div className="usuarios-header">
         <div>
           <h1>Usuarios</h1>
@@ -129,6 +138,7 @@ function Usuarios() {
       </div>
 
       <div className="usuarios-card">
+        {/* Filtros de búsqueda, rol, departamento y activo */}
         <div className="usuarios-filtros">
           <TextField
             label="Buscar"
@@ -176,6 +186,7 @@ function Usuarios() {
           </Select>
         </div>
 
+        {/* Tabla de usuarios */}
         <TableContainer component={Paper} elevation={0}>
           <Table>
             <TableHead>
@@ -232,6 +243,7 @@ function Usuarios() {
                 </TableRow>
               ))}
 
+              {/* Empty state: sin resultados */}
               {filtrados.length === 0 && (
                 <TableRow>
                   <TableCell colSpan={8} align="center">
@@ -248,6 +260,7 @@ function Usuarios() {
         </div>
       </div>
 
+      {/* Modal de alta/edición */}
       <UsuarioFormModal
         open={formAbierto}
         onClose={cerrarForm}

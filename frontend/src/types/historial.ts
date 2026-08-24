@@ -1,3 +1,4 @@
+// Type: cambio de estado en el historial de una solicitud
 export interface HistorialSolicitudResponse {
   idHistorial: number;
   idSolicitud: number;

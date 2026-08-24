@@ -6,6 +6,7 @@ import java.time.LocalDate;
 
 @Data
 @Builder
+// DTO response: equipo listo para el frontend
 public class EquipoResponse {
 
     private Long idEquipo;
@@ -15,8 +16,10 @@ public class EquipoResponse {
     private String modelo;
     private String estado;
     private LocalDate fechaCompra;
+    // Campo: indica si el equipo está activo
     private Boolean activo;
 
+    // Campo: id de la categoría
     private Long idCategoria;
     private String categoria;
 }

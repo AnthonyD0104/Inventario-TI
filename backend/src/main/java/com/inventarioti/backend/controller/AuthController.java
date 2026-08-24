@@ -7,6 +7,7 @@ import com.inventarioti.backend.service.interfaces.AuthService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+// Controller: autenticación de usuarios
 @RestController
 @RequestMapping("/api/auth")
 @CrossOrigin(origins = "*")
@@ -17,6 +18,7 @@ public class AuthController {
     public AuthController(AuthService authService) {
         this.authService = authService;
     }
+    // POST /api/auth/login — inicia sesión
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request){
         LoginResponse response = authService.login(request);

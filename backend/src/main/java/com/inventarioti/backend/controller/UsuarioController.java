@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+// Controller: CRUD de usuarios
 @RestController
 @RequestMapping("/api/usuarios")
 public class UsuarioController {
@@ -22,12 +23,14 @@ public class UsuarioController {
         this.rolService = rolService;
     }
 
+    // GET /api/usuarios — lista usuarios
     @GetMapping
     public ResponseEntity<List<UsuarioResponse>> listarUsuarios() {
 
         return ResponseEntity.ok(usuarioService.listarUsuarios());
     }
 
+    // GET /api/usuarios/{id} — busca usuario
     @GetMapping("/{id}")
     public ResponseEntity<UsuarioResponse> buscarUsuarioPorId(@PathVariable Long id) {
 
@@ -36,6 +39,7 @@ public class UsuarioController {
         );
     }
 
+    // POST /api/usuarios — crea usuario
     @PostMapping
     public ResponseEntity<UsuarioResponse> guardarUsuario(
             @RequestBody UsuarioRequest request) {
@@ -46,6 +50,7 @@ public class UsuarioController {
                 .body(nuevoUsuario);
     }
 
+    // PUT /api/usuarios/{id} — actualiza usuario
     @PutMapping("/{id}")
     public ResponseEntity<UsuarioResponse> actualizarUsuario(
             @PathVariable Long id,
@@ -57,6 +62,7 @@ public class UsuarioController {
         return ResponseEntity.ok(actualizado);
     }
 
+    // DELETE /api/usuarios/{id} — elimina usuario
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> eliminarUsuario(@PathVariable Long id) {
 

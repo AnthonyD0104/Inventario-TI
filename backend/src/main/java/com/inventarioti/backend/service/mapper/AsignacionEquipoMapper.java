@@ -3,11 +3,13 @@ package com.inventarioti.backend.service.mapper;
 import com.inventarioti.backend.dto.response.AsignacionEquipoResponse;
 import com.inventarioti.backend.entity.AsignacionEquipo;
 
+// Mapper: convierte AsignacionEquipo a DTO de respuesta
 public class AsignacionEquipoMapper {
 
     private AsignacionEquipoMapper() {
     }
 
+    // Convierte la entidad a su response
     public static AsignacionEquipoResponse toResponse(
             AsignacionEquipo asignacion) {
 

@@ -1,3 +1,4 @@
+// Type: usuario del sistema (respuesta)
 export interface UsuarioResponse {
   idUsuario: number;
   usuario: string;
@@ -10,6 +11,7 @@ export interface UsuarioResponse {
   activo: boolean;
 }
 
+// Type: datos para crear o actualizar un usuario
 export interface UsuarioRequest {
   usuario: string;
   password: string;
@@ -21,6 +23,7 @@ export interface UsuarioRequest {
   idDepartamento: number;
 }
 
+// Type: asignación directa de equipo a usuario
 export interface AsignacionDirectaRequest {
   idUsuario: number;
   idEquipo: number;

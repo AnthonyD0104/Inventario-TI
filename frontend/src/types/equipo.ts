@@ -1,3 +1,4 @@
+// Type: equipo del inventario (respuesta)
 export interface EquipoResponse {
     idEquipo: number;
     codigoActivo: string;
@@ -11,6 +12,7 @@ export interface EquipoResponse {
     categoria: string;
 }
 
+// Type: datos para crear o actualizar un equipo
 export interface EquipoRequest {
     codigoActivo: string;
     numeroSerie: string;

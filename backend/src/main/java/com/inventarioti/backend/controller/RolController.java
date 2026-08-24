@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import java.util.List;
 import java.util.Optional;
 
+// Controller: CRUD de roles
 @RestController
 @RequestMapping("/api/roles")
 public class RolController {
@@ -18,6 +19,7 @@ public class RolController {
         this.rolService = rolService;
     }
 
+    // GET /api/roles — lista roles
     @GetMapping
     public ResponseEntity<List<Rol>> listarRoles() {
 
@@ -25,6 +27,7 @@ public class RolController {
         return ResponseEntity.ok(roles);
     }
 
+    // GET /api/roles/{id} — busca rol
     @GetMapping("/{id}")
     public ResponseEntity<Rol> buscarRolPorId(@PathVariable Long id) {
 
@@ -33,6 +36,7 @@ public class RolController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    // POST /api/roles — crea rol
     @PostMapping
     public ResponseEntity<Rol> guardarRol(@RequestBody Rol rol) {
         Rol nuevoRol = rolService.guardarRol(rol);
@@ -41,6 +45,7 @@ public class RolController {
                 .body(nuevoRol);
     }
 
+    // PUT /api/roles/{id} — actualiza rol
     @PutMapping("/{id}")
     public ResponseEntity<Rol> actualizarRol(
             @PathVariable Long id,
@@ -52,6 +57,7 @@ public class RolController {
         return  ResponseEntity.ok(actualizado);
     }
 
+    // DELETE /api/roles/{id} — elimina rol
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> eliminarRol(@PathVariable Long id) {
 

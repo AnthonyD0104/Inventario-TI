@@ -1,6 +1,7 @@
 import api from "./axios";
 import type { LoginRequest, LoginResponse } from "../types/auth";
 
+// POST login — inicia sesión y obtiene JWT
 export const login = async (
     datos: LoginRequest
 ): Promise<LoginResponse> => {

@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
+// Controller: CRUD de departamentos
 @RestController
 @RequestMapping("/api/departamentos")
 public class DepartamentoController {
@@ -19,6 +20,7 @@ public class DepartamentoController {
         this.departamentoService = departamentoService;
     }
 
+    // GET /api/departamentos — lista departamentos
     @GetMapping
     public ResponseEntity<List<Departamento>> listarDept() {
 
@@ -27,6 +29,7 @@ public class DepartamentoController {
         return ResponseEntity.ok(departamentos);
     }
 
+    // GET /api/departamentos/{id} — busca departamento
     @GetMapping("/{id}")
     public ResponseEntity<Departamento> buscarDeptPorId(@PathVariable Long id) {
         return departamentoService.buscarDeptPorId(id)
@@ -34,6 +37,7 @@ public class DepartamentoController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    // POST /api/departamentos — crea departamento
     @PostMapping
     public ResponseEntity<Departamento> guardarDept(@RequestBody Departamento departamento) {
 
@@ -44,6 +48,7 @@ public class DepartamentoController {
                 .body(nuevoDept);
     }
 
+    // PUT /api/departamentos/{id} — actualiza departamento
     @PutMapping("/{id}")
     public ResponseEntity<Departamento> actualizarDept(
             @PathVariable Long id,
@@ -57,6 +62,7 @@ public class DepartamentoController {
         return ResponseEntity.ok(actualizado);
     }
 
+    // DELETE /api/departamentos/{id} — elimina departamento
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> eliminarDept(@PathVariable Long id) {
 

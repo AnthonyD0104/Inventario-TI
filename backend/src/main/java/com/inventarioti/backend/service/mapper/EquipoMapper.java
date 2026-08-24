@@ -4,9 +4,11 @@ package com.inventarioti.backend.service.mapper;
 import com.inventarioti.backend.dto.response.EquipoResponse;
 import com.inventarioti.backend.entity.Equipo;
 
+// Mapper: convierte Equipo a DTO de respuesta
 public class EquipoMapper {
     private EquipoMapper(){
     }
+    // Convierte la entidad a su response
     public static EquipoResponse toResponse(Equipo equipo){
         return EquipoResponse.builder()
                 .idEquipo(equipo.getIdEquipo())

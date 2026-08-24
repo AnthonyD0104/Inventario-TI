@@ -1,3 +1,4 @@
+// Modal: asigna un equipo disponible a una solicitud
 import { useEffect, useState } from "react";
 import {
   Button,
@@ -25,6 +26,7 @@ type Props = {
 };
 
 function AsignarEquipoModal({ open, onClose, solicitud, onSaved }: Props) {
+  // Equipos disponibles y campos del formulario
   const [equipos, setEquipos] = useState<EquipoResponse[]>([]);
   const [idEquipo, setIdEquipo] = useState<number | "">("");
   const [observaciones, setObservaciones] = useState("");
@@ -34,6 +36,7 @@ function AsignarEquipoModal({ open, onClose, solicitud, onSaved }: Props) {
   useEffect(() => {
     if (!open) return;
 
+    // Carga equipos disponibles al abrir
     const cargar = async () => {
       setError("");
       setIdEquipo("");
@@ -54,6 +57,7 @@ function AsignarEquipoModal({ open, onClose, solicitud, onSaved }: Props) {
 
   if (!solicitud) return null;
 
+  // Confirma y asigna el equipo a la solicitud
   const handleAsignar = async () => {
     if (!idEquipo) {
       setError("Selecciona un equipo.");
@@ -98,6 +102,7 @@ function AsignarEquipoModal({ open, onClose, solicitud, onSaved }: Props) {
     <Dialog open={open} onClose={onClose} fullWidth maxWidth="sm">
       <DialogTitle>Asignar equipo</DialogTitle>
       <DialogContent>
+        {/* Formulario: destinatario, equipo y observaciones */}
         <Stack spacing={2} sx={{ mt: 1 }}>
           <Typography variant="body2" color="text.secondary">
             Usuario: {solicitud.usuarioCreado ?? "—"} — {solicitud.nombres}{" "}
@@ -133,6 +138,7 @@ function AsignarEquipoModal({ open, onClose, solicitud, onSaved }: Props) {
           {error && <p style={{ color: "#dc2626", margin: 0 }}>{error}</p>}
         </Stack>
       </DialogContent>
+      {/* Acciones: cancelar o asignar */}
       <DialogActions sx={{ px: 3, pb: 2 }}>
         <Button onClick={onClose} disabled={loading}>
           Cancelar

@@ -1,11 +1,13 @@
 import api from "./axios";
 import type { UsuarioRequest, UsuarioResponse } from "../types/usuario";
 
+// GET usuarios — lista usuarios
 export const obtenerUsuarios = async (): Promise<UsuarioResponse[]> => {
   const response = await api.get<UsuarioResponse[]>("/usuarios");
   return response.data;
 };
 
+// POST usuario — crea un usuario
 export const crearUsuario = async (
   datos: UsuarioRequest
 ): Promise<UsuarioResponse> => {
@@ -13,6 +15,7 @@ export const crearUsuario = async (
   return response.data;
 };
 
+// PUT usuario — actualiza un usuario
 export const actualizarUsuario = async (
   id: number,
   datos: UsuarioRequest
@@ -21,6 +24,7 @@ export const actualizarUsuario = async (
   return response.data;
 };
 
+// DELETE usuario — elimina un usuario
 export const eliminarUsuario = async (id: number): Promise<void> => {
   await api.delete(`/usuarios/${id}`);
 };

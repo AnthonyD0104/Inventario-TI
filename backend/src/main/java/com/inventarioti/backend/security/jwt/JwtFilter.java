@@ -16,6 +16,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 import java.util.Collections;
 
+// Interceptor: valida JWT en cada request
 @Component
 public class JwtFilter extends OncePerRequestFilter {
 
@@ -25,12 +26,14 @@ public class JwtFilter extends OncePerRequestFilter {
         this.jwtService = jwtService;
     }
 
+    // Extrae el Bearer token y autentica al usuario
     @Override
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain filterChain)
             throws ServletException, IOException {
         String header = request.getHeader("Authorization");
+        // Si no hay token, continúa la cadena
         if (header == null || !header.startsWith("Bearer ")){
             filterChain.doFilter(request, response);
             return;
@@ -50,6 +53,7 @@ public class JwtFilter extends OncePerRequestFilter {
             authentication.setDetails(
                     new WebAuthenticationDetailsSource().buildDetails(request)
             );
+            // Establece la autenticación en el contexto
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
         }catch (Exception e){

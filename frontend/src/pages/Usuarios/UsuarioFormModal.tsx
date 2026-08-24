@@ -1,3 +1,4 @@
+// Modal: alta/edición de usuario
 import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -39,6 +40,7 @@ const valoresVacios: UsuarioRequest = {
   idDepartamento: undefined as unknown as number,
 };
 
+// Arma un usuario sugerido a partir del nombre
 function sugerirUsuario(nombres: string, apellidos: string) {
   return `${nombres}.${apellidos}`
     .toLowerCase()
@@ -50,10 +52,12 @@ function sugerirUsuario(nombres: string, apellidos: string) {
 function UsuarioFormModal({ open, onClose, usuario, onSaved }: Props) {
   const esEdicion = usuario !== null;
 
+  // Catálogos y error de envío
   const [roles, setRoles] = useState<Rol[]>([]);
   const [departamentos, setDepartamentos] = useState<Departamento[]>([]);
   const [errorGeneral, setErrorGeneral] = useState("");
 
+  // Validación del formulario de usuario
   const {
     control,
     handleSubmit,
@@ -73,6 +77,7 @@ function UsuarioFormModal({ open, onClose, usuario, onSaved }: Props) {
   useEffect(() => {
     if (!open) return;
 
+    // Carga roles/departamentos y rellena el formulario al abrir
     const preparar = async () => {
       setErrorGeneral("");
 
@@ -116,6 +121,7 @@ function UsuarioFormModal({ open, onClose, usuario, onSaved }: Props) {
     preparar();
   }, [open, usuario, reset]);
 
+  // Sugiere el nombre de usuario al escribir nombre y apellidos
   useEffect(() => {
     if (esEdicion || !open) return;
     if (usuarioActual) return;
@@ -124,12 +130,14 @@ function UsuarioFormModal({ open, onClose, usuario, onSaved }: Props) {
     setValue("usuario", sugerirUsuario(nombres, apellidos));
   }, [nombres, apellidos, esEdicion, open, usuarioActual, setValue]);
 
+  // Limpia el formulario y cierra el modal
   const handleClose = () => {
     reset(valoresVacios);
     setErrorGeneral("");
     onClose();
   };
 
+  // Envía el formulario al backend (crear o actualizar)
   const onSubmit = async (datos: UsuarioRequest) => {
     setErrorGeneral("");
 
@@ -174,6 +182,7 @@ function UsuarioFormModal({ open, onClose, usuario, onSaved }: Props) {
       <DialogTitle>{esEdicion ? "Editar usuario" : "Nuevo usuario"}</DialogTitle>
       <form onSubmit={handleSubmit(onSubmit)}>
         <DialogContent>
+          {/* Datos personales, credenciales, rol y departamento */}
           <Stack spacing={2} sx={{ mt: 1 }}>
             <Controller
               name="nombres"
@@ -317,6 +326,7 @@ function UsuarioFormModal({ open, onClose, usuario, onSaved }: Props) {
             )}
           </Stack>
         </DialogContent>
+        {/* Acciones: cancelar o guardar */}
         <DialogActions sx={{ px: 3, pb: 2 }}>
           <Button onClick={handleClose} disabled={isSubmitting}>
             Cancelar

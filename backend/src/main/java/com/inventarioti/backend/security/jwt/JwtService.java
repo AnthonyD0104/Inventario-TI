@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import java.security.Key;
 import java.util.Date;
 
+// Servicio: generación y validación de JWT
 @Service
 public class JwtService {
 
@@ -27,6 +28,7 @@ public class JwtService {
         return Keys.hmacShaKeyFor(SECRET_KEY.getBytes());
     }
 
+    // Genera el JWT con username y rol
     public String generarToken(Usuario usuario) {
         Map<String, Object> claims = new HashMap<>();
         claims.put("rol", usuario.getRol().getNombre());
@@ -39,6 +41,7 @@ public class JwtService {
                 .signWith(getSigningKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
+    // Extrae el username del token
     public String extraerUsuario(String token){
         Claims claims = Jwts.parserBuilder()
                 .setSigningKey(getSigningKey())
@@ -47,6 +50,7 @@ public class JwtService {
                 .getBody();
         return claims.getSubject();
     }
+    // Extrae el rol del token
     public String extraerRol(String token){
         Claims claims = Jwts.parser()
                 .setSigningKey(getSigningKey())
@@ -54,6 +58,7 @@ public class JwtService {
                 .getBody();
         return claims.get("rol", String.class);
     }
+    // Valida que el token pertenezca al usuario
     public boolean validarToken(String token, String usuario) {
 
         return extraerUsuario(token).equals(usuario);

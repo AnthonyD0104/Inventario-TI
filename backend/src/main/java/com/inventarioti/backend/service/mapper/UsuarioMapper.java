@@ -3,8 +3,10 @@ package com.inventarioti.backend.service.mapper;
 import com.inventarioti.backend.dto.response.UsuarioResponse;
 import com.inventarioti.backend.entity.Usuario;
 
+// Mapper: convierte Usuario a DTO de respuesta
 public class UsuarioMapper {
 
+    // Convierte la entidad a su response
     public static UsuarioResponse toResponse(Usuario usuario){
 
         return UsuarioResponse.builder()

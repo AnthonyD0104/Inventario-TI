@@ -1,3 +1,4 @@
+// Página: listado de asignaciones de equipos
 import { useCallback, useEffect, useState } from "react";
 import {
   Button,
@@ -23,12 +24,14 @@ import type { AsignacionEquipoResponse } from "../../types/asignacion";
 import AsignacionDirectaModal from "./AsignacionDirectaModal";
 import "./Asignaciones.css";
 
+// Formatea fecha ISO a YYYY-MM-DD HH:mm
 function formatFecha(fecha: string | null) {
   if (!fecha) return "—";
   return String(fecha).replace("T", " ").slice(0, 16);
 }
 
 function Asignaciones() {
+  // Listado, filtros y modal de asignación directa
   const [asignaciones, setAsignaciones] = useState<AsignacionEquipoResponse[]>(
     []
   );
@@ -36,6 +39,7 @@ function Asignaciones() {
   const [estado, setEstado] = useState("");
   const [modalAbierto, setModalAbierto] = useState(false);
 
+  // Trae las asignaciones desde el backend
   const cargar = useCallback(async () => {
     try {
       const data = await obtenerAsignaciones();
@@ -53,6 +57,7 @@ function Asignaciones() {
     cargar();
   }, [cargar]);
 
+  // Confirma y registra la devolución del equipo
   const handleDevolver = async (a: AsignacionEquipoResponse) => {
     const ok = await Swal.fire({
       title: "¿Registrar devolución?",
@@ -80,6 +85,7 @@ function Asignaciones() {
     }
   };
 
+  // Filtra filas por búsqueda y estado
   const filtradas = asignaciones.filter((a) => {
     const texto = busqueda.toLowerCase();
     const coincideTexto =
@@ -94,6 +100,7 @@ function Asignaciones() {
 
   return (
     <div className="asignaciones-page">
+      {/* Encabezado y alta de asignación directa */}
       <div className="asignaciones-header">
         <div>
           <h1>Asignaciones</h1>
@@ -107,6 +114,7 @@ function Asignaciones() {
       </div>
 
       <div className="asignaciones-card">
+        {/* Filtros de búsqueda y estado */}
         <div className="asignaciones-filtros">
           <TextField
             label="Buscar"
@@ -131,6 +139,7 @@ function Asignaciones() {
           </Select>
         </div>
 
+        {/* Tabla de asignaciones */}
         <TableContainer component={Paper} elevation={0}>
           <Table>
             <TableHead>
@@ -173,6 +182,7 @@ function Asignaciones() {
                     />
                   </TableCell>
                   <TableCell>
+                    {/* Acción: devolver si sigue activa */}
                     {a.estado === "ACTIVA" && (
                       <Button
                         size="small"
@@ -186,6 +196,7 @@ function Asignaciones() {
                 </TableRow>
               ))}
 
+              {/* Empty state: sin resultados */}
               {filtradas.length === 0 && (
                 <TableRow>
                   <TableCell colSpan={8} align="center">
@@ -202,6 +213,7 @@ function Asignaciones() {
         </div>
       </div>
 
+      {/* Modal de asignación directa */}
       <AsignacionDirectaModal
         open={modalAbierto}
         onClose={() => setModalAbierto(false)}

@@ -1,5 +1,7 @@
+// Componente: menú lateral de navegación por rol
 import { NavLink } from "react-router-dom";
 
+// Lee el rol guardado en la sesión
 function getRolSesion(): string {
   try {
     const raw = localStorage.getItem("usuario");
@@ -11,6 +13,7 @@ function getRolSesion(): string {
 }
 
 function Sidebar() {
+  // Visibilidad de enlaces según el rol
   const rol = getRolSesion();
 
   const puedeVerSolicitudes =
@@ -26,6 +29,7 @@ function Sidebar() {
 
   return (
     <aside className="sidebar">
+      {/* Enlaces visibles para el rol actual */}
       <nav className="sidebar-nav">
         <NavLink
           to="/"

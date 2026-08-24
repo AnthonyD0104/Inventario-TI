@@ -7,7 +7,9 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+// Repo: consultas de solicitudes
 @Repository
 public interface SolicitudRepository extends JpaRepository<Solicitud, Long> {
+    // Lista solicitudes registradas por un RRHH
     List<Solicitud> findByUsuarioRrhh(Usuario usuarioRrhh);
 }

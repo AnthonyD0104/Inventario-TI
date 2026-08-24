@@ -1,11 +1,13 @@
 import api from "./axios";
 import type { EquipoResponse, EquipoRequest } from "../types/equipo";
 
+// GET equipos — lista inventario
 export const obtenerEquipos = async (): Promise<EquipoResponse[]> => {
   const response = await api.get<EquipoResponse[]>("/equipos");
   return response.data;
 };
 
+// GET equipo — detalle por id
 export const obtenerEquipoPorId = async (
   id: number
 ): Promise<EquipoResponse> => {
@@ -13,6 +15,7 @@ export const obtenerEquipoPorId = async (
   return response.data;
 };
 
+// POST equipo — crea un equipo
 export const crearEquipo = async (
   equipo: EquipoRequest
 ): Promise<EquipoResponse> => {
@@ -20,6 +23,7 @@ export const crearEquipo = async (
   return response.data;
 };
 
+// PUT equipo — actualiza un equipo
 export const actualizarEquipo = async (
   id: number,
   equipo: EquipoRequest
@@ -28,15 +32,18 @@ export const actualizarEquipo = async (
   return response.data;
 };
 
+// DELETE equipo — da de baja (inactiva)
 export const eliminarEquipo = async (id: number): Promise<void> => {
   await api.delete(`/equipos/${id}`);
 };
 
+// GET equipos inactivos — lista dados de baja
 export const obtenerEquiposInactivos = async (): Promise<EquipoResponse[]> => {
   const response = await api.get<EquipoResponse[]>("/equipos/inactivos");
   return response.data;
 };
 
+// PUT restaurar — reactiva un equipo
 export const restaurarEquipo = async (
   id: number
 ): Promise<EquipoResponse> => {

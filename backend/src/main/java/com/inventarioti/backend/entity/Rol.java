@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+// Entidad: rol de acceso
 @Entity
 @Table(name = "rol")
 @Getter
@@ -22,6 +23,7 @@ public class Rol {
     @Column(nullable = false, unique = true, length = 50)
     private String nombre;
 
+    // Soft-delete / habilitación
     @Column(nullable = false, unique = true, length = 50)
     private Boolean activo = true;
 
